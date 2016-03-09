@@ -22,7 +22,8 @@ public class Runner extends JFrame implements KeyListener{
     	mazeView = new MazeView(maze);
     	
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    	this.addKeyListener(this);
+    	addKeyListener(this);
+    	setFocusable(true);//needed for keylistener
         add(mazeView);
         setSize(800,700);
         setLocationRelativeTo(null);
@@ -47,16 +48,12 @@ public class Runner extends JFrame implements KeyListener{
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP){
-			System.out.println("Up");
-		}
+		
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		if(e.getKeyCode() == KeyEvent.VK_W || e.getKeyCode() == KeyEvent.VK_UP){
-			System.out.println("Up");
-		}
+		
 	}
 	
 	public static void main(String[] args) {

@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import ie.gmit.sw.maze.Node.NodePassage;
@@ -17,7 +16,7 @@ public class MazeView extends JPanel {
 	private static final long serialVersionUID = 1L;
 	public static final int DEFAULT_VIEW_SIZE = 600;	
 	private Node[][] maze;
-		
+	
 	public MazeView(Node[][] maze) {
 		this.maze = maze;
 		setBackground(Color.WHITE);
