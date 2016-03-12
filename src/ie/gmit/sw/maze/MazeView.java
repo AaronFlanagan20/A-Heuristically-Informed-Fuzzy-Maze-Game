@@ -1,79 +1,137 @@
 package ie.gmit.sw.maze;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.*;
+import javax.imageio.*;
+import javax.swing.*;
 
-import javax.imageio.ImageIO;
-import javax.swing.JPanel;
-
-import ie.gmit.sw.maze.Node.NodePassage;
-
-public class MazeView extends JPanel {
-	private static final long serialVersionUID = 1L;
-	public static final int DEFAULT_VIEW_SIZE = 600;	
-	private Node[][] maze;
+public class MazeView extends JPanel implements ActionListener{
 	
-	public MazeView(Node[][] maze) {
+	private static final long serialVersionUID = 1L;
+	public static final int DEFAULT_VIEW_SIZE = 800;	
+	private int cellspan = 5;	
+	private int cellpadding = 3;
+	private char[][] maze;
+	private BufferedImage[] images;
+	private int player_state = 7;
+	private int enemy_state = 5;
+	public static int direction = 0;
+	private Timer timer;
+	private int currentRow;
+	private int currentCol;
+	private boolean zoomOut = false;
+	private int imageIndex = -1;
+	
+	public MazeView(char[][] maze) throws Exception{
 		this.maze = maze;
-		setBackground(Color.WHITE);
+		init();
+		setBackground(Color.LIGHT_GRAY);
 		setDoubleBuffered(true);
+		timer = new Timer(300, this);
+		timer.start();
 	}
-		
-	public void paint(Graphics g) {
+	
+	public void setCurrentRow(int row) {
+		if (row < cellpadding){
+			currentRow = cellpadding;
+		}else if (row > (maze.length - 1) - cellpadding){
+			currentRow = (maze.length - 1) - cellpadding;
+		}else{
+			currentRow = row;
+		}
+	}
+
+	public void setCurrentCol(int col) {
+		if (col < cellpadding){
+			currentCol = cellpadding;
+		}else if (col > (maze[currentRow].length - 1) - cellpadding){
+			currentCol = (maze[currentRow].length - 1) - cellpadding;
+		}else{
+			currentCol = col;
+		}
+	}
+
+	public void paintComponent(Graphics g) {
         super.paintComponent(g);
-       
         Graphics2D g2 = (Graphics2D)g;
+              
+        cellspan = zoomOut ? maze.length : 5;         
+        final int size = DEFAULT_VIEW_SIZE/cellspan;
         
-        BufferedImage img;
-        try {
-            img = ImageIO.read(new File("imgs/brickwall.png"));
-        } catch (IOException e) {
-        	e.printStackTrace();
-        }
-        
-        final int size = DEFAULT_VIEW_SIZE/(maze.length - 7);//space in maze
-        
-        for(int row = 0; row < maze.length; row++) {
-        	for (int col = 0; col < maze[row].length; col++){  
+        for(int row = 0; row < cellspan; row++) {
+        	for (int col = 0; col < cellspan; col++){  
         		int x1 = col * size;
         		int y1 = row * size;
-        		int x2 = (col + 1) * size;
-        		int y2 = (row + 1) * size;
         		
-        		if (maze[row][col].isVisited() && !maze[row][col].isGoalNode()){
+        		char ch = 'X';
+       		
+        		if (zoomOut){
+        			ch = maze[row][col];
+        			if (row == currentRow && col == currentCol){
+        				g2.setColor(Color.YELLOW);
+        				g2.fillRect(x1, y1, size, size);
+        				continue;
+        			}
+        		}else{
+        			ch = maze[currentRow - cellpadding + row][currentCol - cellpadding + col];
+        		}
+        		
+        		if (ch == 'X'){        			
+        			imageIndex = 0;
+        		}else if (ch == 'W'){
+        			imageIndex = 1;
+        		}else if (ch == '?'){
+        			imageIndex = 2;
+        		}else if (ch == 'B'){
+        			imageIndex = 3;
+        		}else if (ch == 'H'){
+        			imageIndex = 4;
+        		}else if (ch == 'P'){
+        			imageIndex = player_state;       			
+        		}else if (ch == 'E'){
+        			imageIndex = enemy_state;
+        		}else{
+        			imageIndex = -1;
+        		}
+        		
+        		if (imageIndex >= 0){
+        			g2.drawImage(images[imageIndex], x1, y1, null);
+        		}else{
         			g2.setColor(Color.LIGHT_GRAY);
         			g2.fillRect(x1, y1, size, size);
-        		}
-        		
-       			if (maze[row][col].isGoalNode()){
-       				g2.setColor(Color.GREEN);
-       				g2.fillRect(x1, y1, size, size);
-       			}
-       			
-        		g2.setColor(Color.RED);
-        		//g2.drawImage(img, x1, y1, x2, y2, x1, y1, x2, y2, null);
-        		g2.drawLine(x1, y1, x2, y1); //N
-        		g2.drawLine(x1, y2, x2, y2); //S
-        		g2.drawLine(x2, y1, x2, y2); //E
-        		g2.drawLine(x1, y1, x1, y2); //W
-        		
-  
-        		if (maze[row][col].isVisited()){
-        			g2.setColor(Color.LIGHT_GRAY);
-        		}else{
-        			g2.setColor(Color.WHITE);
-        		}
-        		
-        		if (maze[row][col].getPassage() == NodePassage.North){
-        			g2.drawLine(x1 + 1, y1, x2 - 1, y1); //N
-        		}else{
-        			g2.drawLine(x1, y1 + 1, x1, y2 -1); //W
-        		}
+        		}      		
         	}
         }
+	}
+	
+	public void toggleZoom(){
+		zoomOut = !zoomOut;		
+	}
+
+	public void actionPerformed(ActionEvent e) {	
+		switch(direction){
+		case 0: player_state = 7; break;
+		case 1: player_state = 8; break;
+		case 2: player_state = 9; break;
+		case 3: player_state = 10; break;
+		}
+		this.repaint();
+	}
+	
+	private void init() throws Exception{
+		images = new BufferedImage[11];
+		images[0] = ImageIO.read(new java.io.File("resources/hedge.png"));
+		images[1] = ImageIO.read(new java.io.File("resources/sword.png"));		
+		images[2] = ImageIO.read(new java.io.File("resources/help.png"));
+		images[3] = ImageIO.read(new java.io.File("resources/bomb.png"));
+		images[4] = ImageIO.read(new java.io.File("resources/h_bomb.png"));
+		images[5] = ImageIO.read(new java.io.File("resources/spider_down.png"));
+		images[6] = ImageIO.read(new java.io.File("resources/spider_up.png"));
+		images[7] = ImageIO.read(new java.io.File("resources/player_up.png"));
+		images[8] = ImageIO.read(new java.io.File("resources/player_down.png"));
+		images[9] = ImageIO.read(new java.io.File("resources/player_right.png"));
+		images[10] = ImageIO.read(new java.io.File("resources/player_left.png"));
+		
 	}
 }
