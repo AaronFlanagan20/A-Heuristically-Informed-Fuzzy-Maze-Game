@@ -21,6 +21,7 @@ public class Runner implements KeyListener{
     	view = new MazeView(model);
     	
     	placePlayer();
+    	placeEnemy();
     	
     	Dimension d = new Dimension(MazeView.DEFAULT_VIEW_SIZE, MazeView.DEFAULT_VIEW_SIZE);
     	view.setPreferredSize(d);
@@ -43,6 +44,14 @@ public class Runner implements KeyListener{
     	currentCol = (int) (MAZE_DIMENSION * Math.random());
     	model[currentRow][currentCol] = 'P';
     	updateView(); 		
+	}
+	
+	private void placeEnemy(){
+		for(int i = 0; i < 10; i++){
+			int row = (int) (MAZE_DIMENSION * Math.random());
+			int col = (int) (MAZE_DIMENSION * Math.random());
+			model[row][col] = 'E';
+		}
 	}
 	
 	private void updateView(){

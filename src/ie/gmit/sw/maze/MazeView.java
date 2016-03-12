@@ -63,10 +63,18 @@ public class MazeView extends JPanel implements ActionListener{
         	for (int col = 0; col < cellspan; col++){  
         		int x1 = col * size;
         		int y1 = row * size;
+        		  
+        		char ch = 'E';
         		
-        		char ch = 'X';
-       		
-        		if (zoomOut){
+        		if (zoomOut){        			
+
+            		if(ch == 'E'){
+        				g2.setColor(Color.black);
+    					g2.fillRect(x1, y1, size, size);
+        			}
+            		
+            		ch = 'X';
+        			
         			ch = maze[row][col];
         			if (row == currentRow && col == currentCol){
         				g2.setColor(Color.YELLOW);
@@ -111,11 +119,18 @@ public class MazeView extends JPanel implements ActionListener{
 
 	public void actionPerformed(ActionEvent e) {	
 		switch(direction){
-		case 0: player_state = 7; break;
-		case 1: player_state = 8; break;
-		case 2: player_state = 9; break;
-		case 3: player_state = 10; break;
+			case 0: player_state = 7; break;
+			case 1: player_state = 8; break;
+			case 2: player_state = 9; break;
+			case 3: player_state = 10; break;
 		}
+		
+		if (enemy_state < 0 || enemy_state == 5){
+			enemy_state = 6;
+		}else{
+			enemy_state = 5;
+		}
+		
 		this.repaint();
 	}
 	
