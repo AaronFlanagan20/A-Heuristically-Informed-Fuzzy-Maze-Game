@@ -6,11 +6,13 @@ import javax.swing.*;
 
 import ie.gmit.sw.maze.Maze;
 import ie.gmit.sw.maze.MazeView;
+import ie.gmit.sw.maze.Node;
+import ie.gmit.sw.maze.Node.NodePassage;
 
 public class Runner implements KeyListener{
 	
 	private static final int MAZE_DIMENSION = 60;
-	private char[][] model;
+	private Node[][] model;
 	private MazeView view;
 	private int currentRow;
 	private int currentCol;
@@ -42,7 +44,7 @@ public class Runner implements KeyListener{
 	private void placePlayer(){   	
     	currentRow = (int) (MAZE_DIMENSION * Math.random());
     	currentCol = (int) (MAZE_DIMENSION * Math.random());
-    	model[currentRow][currentCol] = 'P';
+    	model[currentRow][currentCol].setPassage(NodePassage.P);
     	updateView(); 		
 	}
 	
@@ -50,7 +52,15 @@ public class Runner implements KeyListener{
 		for(int i = 0; i < 10; i++){
 			int row = (int) (MAZE_DIMENSION * Math.random());
 			int col = (int) (MAZE_DIMENSION * Math.random());
-			model[row][col] = 'E';
+			model[row][col].setPassage(NodePassage.E);
+		}
+	}
+	
+	private void enemyMovement(){
+		for (int row = 0; row < model.length; row++){
+			for (int col = 0; col < model[row].length; col++){
+				
+			}
 		}
 	}
 	
@@ -88,9 +98,9 @@ public class Runner implements KeyListener{
 	public void keyTyped(KeyEvent e) {} //Ignore
 
 	private boolean isValidMove(int r, int c){
-		if (r <= model.length - 1 && c <= model[r].length - 1 && model[r][c] == ' '){
-			model[currentRow][currentCol] = ' ';
-			model[r][c] = 'P';
+		if (r <= model.length - 1 && c <= model[r].length - 1 && model[r][c].getPassageType() == ' '){
+			model[currentRow][currentCol].setPassage(NodePassage.NONE);
+			model[r][c].setPassage(NodePassage.P);
 			return true;
 		}else{
 			return false; //Can't move

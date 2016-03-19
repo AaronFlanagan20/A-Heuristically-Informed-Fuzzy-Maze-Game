@@ -11,8 +11,8 @@ public class MazeView extends JPanel implements ActionListener{
 	private static final long serialVersionUID = 1L;
 	public static final int DEFAULT_VIEW_SIZE = 800;	
 	private int cellspan = 5;	
-	private int cellpadding = 3;
-	private char[][] maze;
+	private int cellpadding = 2;
+	private Node[][] maze;
 	private BufferedImage[] images;
 	private int player_state = 7;
 	private int enemy_state = 5;
@@ -23,7 +23,7 @@ public class MazeView extends JPanel implements ActionListener{
 	private boolean zoomOut = false;
 	private int imageIndex = -1;
 	
-	public MazeView(char[][] maze) throws Exception{
+	public MazeView(Node[][] maze) throws Exception{
 		this.maze = maze;
 		init();
 		setBackground(Color.LIGHT_GRAY);
@@ -63,26 +63,22 @@ public class MazeView extends JPanel implements ActionListener{
         	for (int col = 0; col < cellspan; col++){  
         		int x1 = col * size;
         		int y1 = row * size;
-        		  
-        		char ch = 'E';
+        		 
+        		char ch;
         		
-        		if (zoomOut){        			
-
-            		if(ch == 'E'){
-        				g2.setColor(Color.black);
-    					g2.fillRect(x1, y1, size, size);
+        		if (zoomOut){
+        			ch = maze[row][col].getPassageType();
+        			if(ch == 'E'){
+        				g2.setColor(Color.BLACK);
+        				g2.fillRect(x1, y1, size, size);
         			}
-            		
-            		ch = 'X';
-        			
-        			ch = maze[row][col];
         			if (row == currentRow && col == currentCol){
         				g2.setColor(Color.YELLOW);
         				g2.fillRect(x1, y1, size, size);
         				continue;
         			}
         		}else{
-        			ch = maze[currentRow - cellpadding + row][currentCol - cellpadding + col];
+        			ch = maze[currentRow - cellpadding + row][currentCol - cellpadding + col].getPassageType();
         		}
         		
         		if (ch == 'X'){        			
@@ -147,6 +143,5 @@ public class MazeView extends JPanel implements ActionListener{
 		images[8] = ImageIO.read(new java.io.File("resources/player_down.png"));
 		images[9] = ImageIO.read(new java.io.File("resources/player_right.png"));
 		images[10] = ImageIO.read(new java.io.File("resources/player_left.png"));
-		
 	}
 }
