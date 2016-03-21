@@ -46,14 +46,14 @@ public class Maze {
 	
 	private void buildMaze(){
 		for (int row = 0; row < maze.length; row++){
-			for (int col = 0; col < maze[row].length - 1; col++){
+			for (int col = 0; col < maze.length - 1; col++){
 				int num = (int) (Math.random() * 10);
 				if (num >= 4 && col + 1 < maze[row].length - 1){
 					maze[row][col + 1].setPassage(NodePassage.NONE);
 					continue;
 				}
 				if (row + 1 < maze.length){ //Check south
-					maze[row + 1][col].setPassage(NodePassage.X);
+					maze[row + 1][col].setPassage(NodePassage.NONE);
 				}				
 			}
 		}	
