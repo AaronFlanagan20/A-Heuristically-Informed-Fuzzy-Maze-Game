@@ -44,7 +44,8 @@ public class Runner implements KeyListener{
 	private void placePlayer(){   	
     	currentRow = (int) (MAZE_DIMENSION * Math.random());
     	currentCol = (int) (MAZE_DIMENSION * Math.random());
-    	model[currentRow][currentCol].setPassage(NodePassage.P);
+    	model[currentRow][currentCol] = new Node();
+    	model[currentRow][currentCol].setPassage(NodePassage.PLAYER);
     	updateView(); 		
 	}
 	
@@ -52,15 +53,15 @@ public class Runner implements KeyListener{
 		for(int i = 0; i < 10; i++){
 			int row = (int) (MAZE_DIMENSION * Math.random());
 			int col = (int) (MAZE_DIMENSION * Math.random());
-			model[row][col].setPassage(NodePassage.E);
-		}
-	}
-	
-	private void enemyMovement(){
-		for (int row = 0; row < model.length; row++){
-			for (int col = 0; col < model[row].length; col++){
-				
-			}
+			model[currentRow][currentCol] = new Node();
+			model[row][col].setPassage(NodePassage.ENEMY);
+			Thread t = new Thread(){
+				@Override
+				public void run() {
+					super.run();
+				}
+			};
+			t.start();
 		}
 	}
 	
@@ -70,23 +71,36 @@ public class Runner implements KeyListener{
 	}
 
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_RIGHT && currentCol < MAZE_DIMENSION - 1) {
-        	if (isValidMove(currentRow, currentCol + 1))
-        		currentCol++;
-        		MazeView.direction = 2;
-        }else if (e.getKeyCode() == KeyEvent.VK_LEFT && currentCol > 0) {
-        	if (isValidMove(currentRow, currentCol - 1))
-        		currentCol--;
-        		MazeView.direction = 3;
-        }else if (e.getKeyCode() == KeyEvent.VK_UP && currentRow > 0) {
-        	if (isValidMove(currentRow - 1, currentCol))
+    	//player up
+    	if (e.getKeyCode() == KeyEvent.VK_UP && currentRow > 0) {
+        	if (isValidMove(currentRow - 1, currentCol)){
         		currentRow--;
         		MazeView.direction = 0;
-        }else if (e.getKeyCode() == KeyEvent.VK_DOWN && currentRow < MAZE_DIMENSION - 1) {
-        	if (isValidMove(currentRow + 1, currentCol))
+        	}
+        }
+    	//player down
+    	else if (e.getKeyCode() == KeyEvent.VK_DOWN && currentRow < MAZE_DIMENSION - 1) {
+        	if (isValidMove(currentRow + 1, currentCol)){
         		currentRow++; 
         		MazeView.direction = 1;
-        }else if (e.getKeyCode() == KeyEvent.VK_Z){
+        	}
+        }
+    	//player right
+    	else if (e.getKeyCode() == KeyEvent.VK_RIGHT && currentCol < MAZE_DIMENSION - 1) {
+        	if (isValidMove(currentRow, currentCol + 1)){
+        		currentCol++;
+        		MazeView.direction = 2;
+        	}
+        }
+    	//player left
+    	else if (e.getKeyCode() == KeyEvent.VK_LEFT && currentCol > 0) {
+        	if (isValidMove(currentRow, currentCol - 1)){
+        		currentCol--;
+        		MazeView.direction = 3;
+        	}
+        }
+    	//toggle view
+    	else if (e.getKeyCode() == KeyEvent.VK_Z){
         	view.toggleZoom();
         }else{
         	return;
@@ -94,13 +108,15 @@ public class Runner implements KeyListener{
         
         updateView();       
     }
-    public void keyReleased(KeyEvent e) {} //Ignore
+    public void keyReleased(KeyEvent e) {
+    	MazeView.direction = 4;
+    }
 	public void keyTyped(KeyEvent e) {} //Ignore
 
 	private boolean isValidMove(int r, int c){
 		if (r <= model.length - 1 && c <= model[r].length - 1 && model[r][c].getPassageType() == ' '){
 			model[currentRow][currentCol].setPassage(NodePassage.NONE);
-			model[r][c].setPassage(NodePassage.P);
+			model[r][c].setPassage(NodePassage.PLAYER);
 			return true;
 		}else{
 			return false; //Can't move

@@ -5,12 +5,11 @@ import java.util.List;
 
 public class Node {
 	
-	public enum NodePassage{X, W, Q, B, H, P, E, NONE};
-	private NodePassage passage = NodePassage.X;
+	public enum NodePassage{WALL, WEAPON, PRISONER, BOMB, PLAYER, ENEMY,NONE};
+	private NodePassage passage = NodePassage.WALL;
 	private List<Node> children = new ArrayList<Node>();
 	public boolean visited =  false;
 	public boolean goal;
-	private int row, col;
 	
 	public NodePassage getPassage() {
 		return passage;
@@ -41,19 +40,17 @@ public class Node {
 	}
 	
 	public char getPassageType(){
-		if(passage == NodePassage.X){
+		if(passage == NodePassage.WALL){
 			return 'X';
-		}if(passage == NodePassage.W){
+		}if(passage == NodePassage.WEAPON){
 			return 'W';
-		}if(passage == NodePassage.Q){
+		}if(passage == NodePassage.PRISONER){
 			return '?';
-		}if(passage == NodePassage.B){
+		}if(passage == NodePassage.BOMB){
 			return 'B';
-		}if(passage == NodePassage.H){
-			return 'H';
-		}if(passage == NodePassage.P){
+		}if(passage == NodePassage.PLAYER){
 			return 'P';
-		}if(passage == NodePassage.E){
+		}if(passage == NodePassage.ENEMY){
 			return 'E';
 		}else{
 			return ' ';

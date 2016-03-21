@@ -10,12 +10,14 @@ public class MazeView extends JPanel implements ActionListener{
 	
 	private static final long serialVersionUID = 1L;
 	public static final int DEFAULT_VIEW_SIZE = 800;	
-	private int cellspan = 5;	
+	private int cellspan;	
 	private int cellpadding = 2;
 	private Node[][] maze;
 	private BufferedImage[] images;
-	private int player_state = 7;
 	private int enemy_state = 5;
+	private int player_state = 7;
+	private int player_sword = 11;
+	public static boolean hasSword = false;
 	public static int direction = 0;
 	private Timer timer;
 	private int currentRow;
@@ -69,7 +71,7 @@ public class MazeView extends JPanel implements ActionListener{
         		if (zoomOut){
         			ch = maze[row][col].getPassageType();
         			if(ch == 'E'){
-        				g2.setColor(Color.BLACK);
+        				g2.setColor(Color.BLUE);
         				g2.fillRect(x1, y1, size, size);
         			}
         			if (row == currentRow && col == currentCol){
@@ -115,10 +117,14 @@ public class MazeView extends JPanel implements ActionListener{
 
 	public void actionPerformed(ActionEvent e) {	
 		switch(direction){
-			case 0: player_state = 7; break;
-			case 1: player_state = 8; break;
-			case 2: player_state = 9; break;
-			case 3: player_state = 10; break;
+			case 0: player_state = 8; break;
+			case 1: player_state = 9; break;
+			case 2: player_state = 10; break;
+			case 3: player_state = 11; break;
+			case 4: player_state = 7; break;
+//			case 5: player_state = 7; break;
+//			case 6: player_state = 7; break;
+//			case 7: player_state = 7; break;
 		}
 		
 		if (enemy_state < 0 || enemy_state == 5){
@@ -131,17 +137,21 @@ public class MazeView extends JPanel implements ActionListener{
 	}
 	
 	private void init() throws Exception{
-		images = new BufferedImage[11];
-		images[0] = ImageIO.read(new java.io.File("resources/hedge.png"));
+		images = new BufferedImage[30];
+		images[0] = ImageIO.read(new java.io.File("resources/wall.png"));
 		images[1] = ImageIO.read(new java.io.File("resources/sword.png"));		
-		images[2] = ImageIO.read(new java.io.File("resources/help.png"));
+		images[2] = ImageIO.read(new java.io.File("resources/prisoner.png"));
 		images[3] = ImageIO.read(new java.io.File("resources/bomb.png"));
-		images[4] = ImageIO.read(new java.io.File("resources/h_bomb.png"));
 		images[5] = ImageIO.read(new java.io.File("resources/spider_down.png"));
 		images[6] = ImageIO.read(new java.io.File("resources/spider_up.png"));
-		images[7] = ImageIO.read(new java.io.File("resources/player_up.png"));
-		images[8] = ImageIO.read(new java.io.File("resources/player_down.png"));
-		images[9] = ImageIO.read(new java.io.File("resources/player_right.png"));
-		images[10] = ImageIO.read(new java.io.File("resources/player_left.png"));
+		images[7] = ImageIO.read(new java.io.File("resources/player_idle.png"));
+		images[8] = ImageIO.read(new java.io.File("resources/player_up.png"));
+		images[9] = ImageIO.read(new java.io.File("resources/player_down.png"));
+		images[10] = ImageIO.read(new java.io.File("resources/player_right.png"));
+		images[11] = ImageIO.read(new java.io.File("resources/player_left.png"));
+		images[12] = ImageIO.read(new java.io.File("resources/player_sword.png"));
+		images[13] = ImageIO.read(new java.io.File("resources/player_sword_up.png"));
+		images[15] = ImageIO.read(new java.io.File("resources/player_sword_right.png"));
+		images[14] = ImageIO.read(new java.io.File("resources/player_sword_left.png"));
 	}
 }

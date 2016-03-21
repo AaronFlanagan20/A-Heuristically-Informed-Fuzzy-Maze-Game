@@ -10,18 +10,18 @@ public class Maze {
 		init();
 		buildMaze();
 		
-		//int featureNumber = (int)((rows * cols) * 0.01);
-		//addFeature('W', 'X', featureNumber);
-		//addFeature('?', 'X', featureNumber);
-		//addFeature('B', 'X', featureNumber);
-		//addFeature('H', 'X', featureNumber);
+		int featureNumber = (int)((rows * cols) * 0.01);
+		addFeature('W', 'X', featureNumber);
+		addFeature('?', 'X', featureNumber);
+		addFeature('B', 'X', featureNumber);
+		addFeature('H', 'X', featureNumber);
 	}
 	
 	private void init(){
 		for(int row = 0; row < maze.length; row++){
 			for(int col = 0; col < maze[row].length; col++){
 				maze[row][col] = new Node();
-				maze[row][col].setPassage(NodePassage.X);
+				maze[row][col].setPassage(NodePassage.WALL);
 			}
 		}
 	}
@@ -34,10 +34,9 @@ public class Maze {
 			
 			if (maze[row][col].getPassageType() == replace){
 				switch(feature){
-					case 'W': maze[row][col].setPassage(NodePassage.W); break;
-					case '?': maze[row][col].setPassage(NodePassage.Q); break;
-					case 'B': maze[row][col].setPassage(NodePassage.B); break;
-					case 'H': maze[row][col].setPassage(NodePassage.H); break;
+					case 'W': maze[row][col].setPassage(NodePassage.WEAPON); break;
+					case '?': maze[row][col].setPassage(NodePassage.PRISONER); break;
+					case 'B': maze[row][col].setPassage(NodePassage.BOMB); break;
 				}
 				counter++;
 			}
@@ -46,7 +45,7 @@ public class Maze {
 	
 	private void buildMaze(){
 		for (int row = 0; row < maze.length; row++){
-			for (int col = 0; col < maze.length - 1; col++){
+			for (int col = 0; col < maze[row].length; col++){
 				int num = (int) (Math.random() * 10);
 				if (num >= 4 && col + 1 < maze[row].length - 1){
 					maze[row][col + 1].setPassage(NodePassage.NONE);
