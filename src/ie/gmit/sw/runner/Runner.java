@@ -69,34 +69,78 @@ public class Runner implements KeyListener{
 		view.setCurrentRow(currentRow);
 		view.setCurrentCol(currentCol);
 	}
+	
+	boolean held = false;
+	int moveCount = 0;
+	int sideCountRight = 3;
+	int sideCountLeft = 5;
 
+	//TODO: Slow down running
     public void keyPressed(KeyEvent e) {
     	//player up
     	if (e.getKeyCode() == KeyEvent.VK_UP && currentRow > 0) {
         	if (isValidMove(currentRow - 1, currentCol)){
-        		currentRow--;
-        		MazeView.direction = 0;
+        		held = true;
+        		System.out.println(moveCount);
+        		if(held){
+        			currentRow--;
+        			if(moveCount <= 2){
+        				MazeView.direction = moveCount;
+        				moveCount++;
+        				updateView();
+        			}else{
+        				moveCount = 0;
+        				MazeView.direction = moveCount;
+        				moveCount++;
+        				updateView();
+        			}
+        		}
         	}
         }
     	//player down
     	else if (e.getKeyCode() == KeyEvent.VK_DOWN && currentRow < MAZE_DIMENSION - 1) {
         	if (isValidMove(currentRow + 1, currentCol)){
         		currentRow++; 
-        		MazeView.direction = 1;
+    			if(moveCount <= 2){
+    				MazeView.direction = moveCount;
+    				moveCount++;
+    				updateView();
+    			}else{
+    				moveCount = 0;
+    				MazeView.direction = moveCount;
+    				moveCount++;
+    				updateView();
+    			}
         	}
         }
     	//player right
     	else if (e.getKeyCode() == KeyEvent.VK_RIGHT && currentCol < MAZE_DIMENSION - 1) {
         	if (isValidMove(currentRow, currentCol + 1)){
         		currentCol++;
-        		MazeView.direction = 2;
+        		if(sideCountRight == 3){
+    				MazeView.direction = 3;
+    				sideCountRight = 4;
+    				updateView();
+    			}else if(sideCountRight == 4){
+    				MazeView.direction = 4;
+    				sideCountRight = 3;
+    				updateView();
+    			}
         	}
         }
     	//player left
     	else if (e.getKeyCode() == KeyEvent.VK_LEFT && currentCol > 0) {
         	if (isValidMove(currentRow, currentCol - 1)){
         		currentCol--;
-        		MazeView.direction = 3;
+        		if(sideCountLeft == 5){
+    				MazeView.direction = 5;
+    				sideCountLeft = 6;
+    				updateView();
+    			}else if(sideCountLeft == 6){
+    				MazeView.direction = 6;
+    				sideCountLeft = 5;
+    				updateView();
+    			}
         	}
         }
     	//toggle view
@@ -105,11 +149,11 @@ public class Runner implements KeyListener{
         }else{
         	return;
         }
-        
-        updateView();       
+          
     }
     public void keyReleased(KeyEvent e) {
-    	MazeView.direction = 4;
+    	held = false;
+    	MazeView.direction = 2;
     }
 	public void keyTyped(KeyEvent e) {} //Ignore
 

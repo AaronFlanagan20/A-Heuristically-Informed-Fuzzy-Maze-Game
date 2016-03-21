@@ -117,13 +117,13 @@ public class MazeView extends JPanel implements ActionListener{
 
 	public void actionPerformed(ActionEvent e) {	
 		switch(direction){
-			case 0: player_state = 8; break;
-			case 1: player_state = 9; break;
-			case 2: player_state = 10; break;
-			case 3: player_state = 11; break;
-			case 4: player_state = 7; break;
-//			case 5: player_state = 7; break;
-//			case 6: player_state = 7; break;
+			case 0: player_state = 8; break;//up
+			case 1: player_state = 9; break;//down
+			case 2: player_state = 7; break;//idle
+			case 3: player_state = 10; break;//player right
+			case 4: player_state = 11; break;//player mid run
+			case 5: player_state = 12; break;//player left
+			case 6: player_state = 13; break;//player left midrun
 //			case 7: player_state = 7; break;
 		}
 		
@@ -148,10 +148,12 @@ public class MazeView extends JPanel implements ActionListener{
 		images[8] = ImageIO.read(new java.io.File("resources/player_up.png"));
 		images[9] = ImageIO.read(new java.io.File("resources/player_down.png"));
 		images[10] = ImageIO.read(new java.io.File("resources/player_right.png"));
-		images[11] = ImageIO.read(new java.io.File("resources/player_left.png"));
-		images[12] = ImageIO.read(new java.io.File("resources/player_sword.png"));
-		images[13] = ImageIO.read(new java.io.File("resources/player_sword_up.png"));
-		images[15] = ImageIO.read(new java.io.File("resources/player_sword_right.png"));
-		images[14] = ImageIO.read(new java.io.File("resources/player_sword_left.png"));
+		images[11] = ImageIO.read(new java.io.File("resources/player_midrun_right.png"));
+		images[12] = ImageIO.read(new java.io.File("resources/player_left.png"));
+		images[13] = ImageIO.read(new java.io.File("resources/player_midrun_left.png"));
+		images[14] = ImageIO.read(new java.io.File("resources/player_sword.png"));
+		images[15] = ImageIO.read(new java.io.File("resources/player_sword_up.png"));
+		images[16] = ImageIO.read(new java.io.File("resources/player_sword_right.png"));
+		images[17] = ImageIO.read(new java.io.File("resources/player_sword_left.png"));
 	}
 }
