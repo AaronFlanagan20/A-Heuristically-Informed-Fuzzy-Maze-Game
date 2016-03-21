@@ -16,7 +16,6 @@ public class MazeView extends JPanel implements ActionListener{
 	private BufferedImage[] images;
 	private int enemy_state = 5;
 	private int player_state = 7;
-	private int player_sword = 11;
 	public static boolean hasSword = false;
 	public static int direction = 0;
 	private Timer timer;
@@ -58,9 +57,9 @@ public class MazeView extends JPanel implements ActionListener{
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
               
-        cellspan = zoomOut ? maze.length : 5;         
+        cellspan = zoomOut ? maze.length -1 : 5; 
         final int size = DEFAULT_VIEW_SIZE/cellspan;
-        
+
         for(int row = 0; row < cellspan; row++) {
         	for (int col = 0; col < cellspan; col++){  
         		int x1 = col * size;
@@ -72,6 +71,10 @@ public class MazeView extends JPanel implements ActionListener{
         			ch = maze[row][col].getPassageType();
         			if(ch == 'E'){
         				g2.setColor(Color.BLUE);
+        				g2.fillRect(x1, y1, size, size);
+        			}
+        			else if(ch == 'W'){
+        				g2.setColor(Color.RED);
         				g2.fillRect(x1, y1, size, size);
         			}
         			if (row == currentRow && col == currentCol){
@@ -121,12 +124,17 @@ public class MazeView extends JPanel implements ActionListener{
 			case 1: player_state = 9; break;//down
 			case 2: player_state = 7; break;//idle
 			case 3: player_state = 10; break;//player right
-			case 4: player_state = 11; break;//player mid run
+			case 4: player_state = 11; break;//player right midrun
 			case 5: player_state = 12; break;//player left
 			case 6: player_state = 13; break;//player left midrun
-//			case 7: player_state = 7; break;
+			case 7: player_state = 14; break;//player sword
+			case 8: player_state = 15; break;//player sword up
+			case 9: player_state = 16; break;//player sword right
+			case 10: player_state = 17; break;//player sword midrun right
+			case 11: player_state = 18; break;//player sword left
+			case 12: player_state = 19; break;//player sword midrun left
 		}
-		
+						
 		if (enemy_state < 0 || enemy_state == 5){
 			enemy_state = 6;
 		}else{
@@ -137,7 +145,7 @@ public class MazeView extends JPanel implements ActionListener{
 	}
 	
 	private void init() throws Exception{
-		images = new BufferedImage[30];
+		images = new BufferedImage[20];
 		images[0] = ImageIO.read(new java.io.File("resources/wall.png"));
 		images[1] = ImageIO.read(new java.io.File("resources/sword.png"));		
 		images[2] = ImageIO.read(new java.io.File("resources/prisoner.png"));
@@ -154,6 +162,8 @@ public class MazeView extends JPanel implements ActionListener{
 		images[14] = ImageIO.read(new java.io.File("resources/player_sword.png"));
 		images[15] = ImageIO.read(new java.io.File("resources/player_sword_up.png"));
 		images[16] = ImageIO.read(new java.io.File("resources/player_sword_right.png"));
-		images[17] = ImageIO.read(new java.io.File("resources/player_sword_left.png"));
+		images[17] = ImageIO.read(new java.io.File("resources/player_midrun_right_sword.png"));
+		images[18] = ImageIO.read(new java.io.File("resources/player_sword_left.png"));
+		images[19] = ImageIO.read(new java.io.File("resources/player_midrun_left_sword.png"));
 	}
 }
