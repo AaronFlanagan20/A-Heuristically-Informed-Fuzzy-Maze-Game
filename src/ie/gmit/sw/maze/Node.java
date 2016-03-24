@@ -5,15 +5,12 @@ import java.util.List;
 
 public class Node {
 	
-	public enum NodePassage{WALL, WEAPON, PRISONER, BOMB, PLAYER, ENEMY,NONE};
-	private NodePassage passage = NodePassage.WALL;
+	public enum NodeType{WALL, WEAPON, PRISONER, BOMB, PLAYER, ENEMY, EXIT, NONE};
+	private NodeType type = NodeType.PLAYER;
 	private List<Node> children = new ArrayList<Node>();
+	private List<Node> exits = new ArrayList<Node>();
 	public boolean visited =  false;
 	public boolean goal;
-	
-	public NodePassage getPassage() {
-		return passage;
-	}
 	
 	public Node[] children(){
 		return (Node[]) children.toArray(new Node[children.size()]);
@@ -39,26 +36,28 @@ public class Node {
 		children.remove(child);
 	}
 	
-	public char getPassageType(){
-		if(passage == NodePassage.WALL){
+	public char getType(){
+		if(type == NodeType.WALL){
 			return 'X';
-		}if(passage == NodePassage.WEAPON){
+		}if(type == NodeType.WEAPON){
 			return 'W';
-		}if(passage == NodePassage.PRISONER){
+		}if(type == NodeType.PRISONER){
 			return '?';
-		}if(passage == NodePassage.BOMB){
+		}if(type == NodeType.BOMB){
 			return 'B';
-		}if(passage == NodePassage.PLAYER){
+		}if(type == NodeType.PLAYER){
 			return 'P';
-		}if(passage == NodePassage.ENEMY){
+		}if(type == NodeType.ENEMY){
 			return 'E';
+		}if(type == NodeType.EXIT){
+			return 'L';
 		}else{
 			return ' ';
 		}
 	}
 
-	public void setPassage(NodePassage passage) {
-		this.passage = passage;
+	public void setType(NodeType type) {
+		this.type = type;
 	}
 
 	public boolean isVisited() {
@@ -69,11 +68,15 @@ public class Node {
 		this.visited = visited;
 	}
 
-	public boolean isGoalNode() {
-		return goal;
+	public boolean isGoalNode(Node node) {
+		if(exits.contains(node))
+			return true;
+		else
+			return false;
 	}
 
-	public void setGoalNode(boolean goal) {
+	public void setGoalNode(boolean goal, Node node) {
 		this.goal = goal;
+		exits.add(node);
 	}
 }

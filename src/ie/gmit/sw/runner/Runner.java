@@ -7,7 +7,7 @@ import javax.swing.*;
 import ie.gmit.sw.maze.Maze;
 import ie.gmit.sw.maze.MazeView;
 import ie.gmit.sw.maze.Node;
-import ie.gmit.sw.maze.Node.NodePassage;
+import ie.gmit.sw.maze.Node.NodeType;
 
 public class Runner implements KeyListener{
 	
@@ -24,18 +24,18 @@ public class Runner implements KeyListener{
     	
     	placePlayer();
     	placeEnemy();
-    	
+    	    	
     	Dimension d = new Dimension(MazeView.DEFAULT_VIEW_SIZE, MazeView.DEFAULT_VIEW_SIZE);
     	view.setPreferredSize(d);
     	view.setMinimumSize(d);
     	view.setMaximumSize(d);
     	
-    	JFrame f = new JFrame("Mario Maze");
+    	JFrame f = new JFrame("Mazogs");
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.addKeyListener(this);
         f.getContentPane().setLayout(new FlowLayout());
         f.add(view);
-        f.setSize(1000,1000);
+        f.setSize(1000,900);
         f.setLocationRelativeTo(null);
         f.pack();
         f.setVisible(true);
@@ -45,18 +45,17 @@ public class Runner implements KeyListener{
     	currentRow = (int) (MAZE_DIMENSION * Math.random());
     	currentCol = (int) (MAZE_DIMENSION * Math.random());
     	model[currentRow][currentCol] = new Node();
-    	model[currentRow][currentCol].setPassage(NodePassage.PLAYER);
-    	updateView(); 		
+    	model[currentRow][currentCol].setType(NodeType.PLAYER);
+    	updateView();
 	}
 	
 	private void placeEnemy(){
-		for(int i = 0; i < 10; i++){
+		for(int i = 0; i < 11; i++){
 			int row = (int) (MAZE_DIMENSION * Math.random());
 			int col = (int) (MAZE_DIMENSION * Math.random());
 			model[currentRow][currentCol] = new Node();
-			model[row][col].setPassage(NodePassage.ENEMY);
+			model[row][col].setType(NodeType.ENEMY);
 			Thread t = new Thread(){
-				@Override
 				public void run() {
 					super.run();
 				}
@@ -206,20 +205,35 @@ public class Runner implements KeyListener{
 	public void keyTyped(KeyEvent e) {} //Ignore
 
 	private boolean isValidMove(int r, int c){
-		if (r <= model.length - 1 && c <= model[r].length - 1 && model[r][c].getPassageType() == ' '){
-			model[currentRow][currentCol].setPassage(NodePassage.NONE);
-			model[r][c].setPassage(NodePassage.PLAYER);
+		if (r <= model.length - 1 && c <= model[r].length - 1 && model[r][c].getType() == ' '){
+			model[currentRow][currentCol].setType(NodeType.NONE);
+			model[r][c].setType(NodeType.PLAYER);
 			return true;
 		}else{
-			if(model[r][c].getPassageType() == 'W' && !MazeView.hasSword){
-				model[r][c].setPassage(NodePassage.WALL);
+			if(model[r][c].getType() == 'W' && !MazeView.hasSword){
+				model[r][c].setType(NodeType.WALL);
 				MazeView.hasSword = true;
 				MazeView.direction = 7;
 				view.repaint();
+			}if(model[r][c].getType() == 'B'){ 
+				model[r][c] = new Node();
+				model[r][c].setType(NodeType.WALL);
+				depthFirstBomb(model[r][c], 3);
 			}
 			return false; //Can't move
 		}
 	}
+	
+	private void depthFirstBomb(Node node, int depth){
+		int limit = 0;
+		while (limit <= depth){
+			node.setVisited(true);
+			Node[] children = node.children();
+			System.out.println(children.length);
+			
+		}
+	}
+	
 	
 	public static void main(String[] args) throws Exception{
 		new Runner();

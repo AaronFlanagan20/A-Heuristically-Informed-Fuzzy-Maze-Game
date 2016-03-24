@@ -17,7 +17,7 @@ public class MazeView extends JPanel implements ActionListener{
 	private int enemy_state = 5;
 	private int player_state = 7;
 	public static boolean hasSword = false;
-	public static int direction = 0;
+	public static int direction = 2;
 	private Timer timer;
 	private int currentRow;
 	private int currentCol;
@@ -56,34 +56,39 @@ public class MazeView extends JPanel implements ActionListener{
 	public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
-              
-        cellspan = zoomOut ? maze.length -1 : 5; 
+                      
+        cellspan = zoomOut ? maze.length : 5; 
         final int size = DEFAULT_VIEW_SIZE/cellspan;
-
+        
         for(int row = 0; row < cellspan; row++) {
         	for (int col = 0; col < cellspan; col++){  
         		int x1 = col * size;
         		int y1 = row * size;
-        		 
+        		        		 
         		char ch;
         		
         		if (zoomOut){
-        			ch = maze[row][col].getPassageType();
+        			ch = maze[row][col].getType();
+        			
         			if(ch == 'E'){
-        				g2.setColor(Color.BLUE);
-        				g2.fillRect(x1, y1, size, size);
-        			}
-        			else if(ch == 'W'){
         				g2.setColor(Color.RED);
         				g2.fillRect(x1, y1, size, size);
+        				continue;
         			}
+        			
+        			if(ch == 'W'){
+        				g2.setColor(Color.BLUE);
+        				g2.fillRect(x1, y1, size, size);
+        				continue;
+        			}
+        			       			
         			if (row == currentRow && col == currentCol){
         				g2.setColor(Color.YELLOW);
         				g2.fillRect(x1, y1, size, size);
         				continue;
         			}
         		}else{
-        			ch = maze[currentRow - cellpadding + row][currentCol - cellpadding + col].getPassageType();
+        			ch = maze[currentRow - cellpadding + row][currentCol - cellpadding + col].getType();
         		}
         		
         		if (ch == 'X'){        			
@@ -97,7 +102,7 @@ public class MazeView extends JPanel implements ActionListener{
         		}else if (ch == 'H'){
         			imageIndex = 4;
         		}else if (ch == 'P'){
-        			imageIndex = player_state;       			
+        			imageIndex = player_state;    
         		}else if (ch == 'E'){
         			imageIndex = enemy_state;
         		}else{
