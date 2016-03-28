@@ -88,7 +88,7 @@ public class Maze {
     				// store last node in order to mark it later
     				last = oppositePoint;
 
-    				// iterate through direct neighbors of node, same as earlier
+    				// iterate through direct neighbours of node, same as earlier
     				for(int row=-1;row<=1;row++)
 			        	for(int col=-1;col<=1;col++){
 			        		if(row==0&&col==0||row!=0&&col!=0)
@@ -115,20 +115,6 @@ public class Maze {
 				System.out.print(maze[i][j].getType());
 			System.out.println();
 		}
-        
-		
-//		for (int row = 0; row < maze.length; row++){
-//			for (int col = 0; col < maze[row].length - 1; col++){
-//				int num = (int) (Math.random() * 10);
-//				if (num >= 8 && col + 1 < maze[row].length - 1){
-//					maze[row][col + 1].setType(NodeType.WALL);
-//					continue;
-//				}
-//				if (row + 1 < maze.length){
-//					maze[row + 1][col].setType(NodeType.NONE);
-//				}				
-//			}
-//		}	
 	}
 	
 	public Node[][] getMaze(){

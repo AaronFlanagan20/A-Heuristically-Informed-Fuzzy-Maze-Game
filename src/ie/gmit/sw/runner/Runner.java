@@ -222,7 +222,7 @@ public class Runner extends JFrame implements KeyListener{
 			}if(model[r][c].getType() == 'B'){ 
 				model[r][c] = new Node(r,c);
 				model[r][c].setType(NodeType.NONE);
-				depthFirstBomb(model[r][c], 3);
+				blowUpBomb(model[r][c], 3);
 			}if(model[r][c].getType() == '.'){ 
 				model[r][c] = new Node(r,c);
 				model[r][c].setType(NodeType.NONE);
@@ -233,16 +233,18 @@ public class Runner extends JFrame implements KeyListener{
 		}
 	}
 	
-	private void depthFirstBomb(Node node, int depth){
+	private void blowUpBomb(Node node, int depth){
+		int row = node.getRow();
+		int col = node.getCol();
 		for(int i = 0; i < depth; i++){
-			int row = node.getRow() + i;
-			int col = node.getCol() + i;
-						
-			model[row][col] = new Node(row,col);
-			model[row][col].setType(NodeType.NONE);
+			for(int x = row; x < row + 3; x++){
+				for(int y = col; y < col + 3; y++){
+					if(model[x][y].getType() != 'P')
+						model[x][y].setType(NodeType.NONE);
+				}
+			}
 		}
 	}
-	
 	
 	public static void main(String[] args) throws Exception{
 		new Runner();
