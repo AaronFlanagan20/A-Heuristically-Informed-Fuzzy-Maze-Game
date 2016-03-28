@@ -44,7 +44,7 @@ public class Runner implements KeyListener{
 	private void placePlayer(){   	
     	currentRow = (int) (MAZE_DIMENSION * Math.random());
     	currentCol = (int) (MAZE_DIMENSION * Math.random());
-    	model[currentRow][currentCol] = new Node();
+    	model[currentRow][currentCol] = new Node(currentRow, currentCol);
     	model[currentRow][currentCol].setType(NodeType.PLAYER);
     	updateView();
 	}
@@ -53,7 +53,7 @@ public class Runner implements KeyListener{
 		for(int i = 0; i < 11; i++){
 			int row = (int) (MAZE_DIMENSION * Math.random());
 			int col = (int) (MAZE_DIMENSION * Math.random());
-			model[currentRow][currentCol] = new Node();
+			model[row][col] = new Node(row,col);
 			model[row][col].setType(NodeType.ENEMY);
 			Thread t = new Thread(){
 				public void run() {
@@ -216,8 +216,8 @@ public class Runner implements KeyListener{
 				MazeView.direction = 7;
 				view.repaint();
 			}if(model[r][c].getType() == 'B'){ 
-				model[r][c] = new Node();
-				model[r][c].setType(NodeType.WALL);
+				model[r][c] = new Node(r,c);
+				model[r][c].setType(NodeType.NONE);
 				depthFirstBomb(model[r][c], 3);
 			}
 			return false; //Can't move
@@ -225,12 +225,13 @@ public class Runner implements KeyListener{
 	}
 	
 	private void depthFirstBomb(Node node, int depth){
-		int limit = 0;
-		while (limit <= depth){
-			node.setVisited(true);
-			Node[] children = node.children();
-			System.out.println(children.length);
-			
+		for(int i = 0; i < depth; i++){
+			int row = node.getRow() + i;
+			int col = node.getCol() + i;
+						
+			model[row][col] = new Node(row,col);
+			model[row][col].setType(NodeType.NONE);
+
 		}
 	}
 	

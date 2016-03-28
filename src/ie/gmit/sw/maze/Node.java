@@ -5,13 +5,36 @@ import java.util.List;
 
 public class Node {
 	
-	public enum NodeType{WALL, WEAPON, PRISONER, BOMB, PLAYER, ENEMY, EXIT, NONE};
+	public enum NodeType{START, WALL, WEAPON, PRISONER, BOMB, PLAYER, ENEMY, EXIT, NONE};
 	private NodeType type = NodeType.PLAYER;
 	private List<Node> children = new ArrayList<Node>();
 	private List<Node> exits = new ArrayList<Node>();
 	public boolean visited =  false;
 	public boolean goal;
+	int row;
+	int col;
 	
+	public Node(int row, int col) {
+		this.row = row;
+		this.col = col;
+	}
+	
+	public int getRow() {
+		return row;
+	}
+
+	public void setRow(int row) {
+		this.row = row;
+	}
+
+	public int getCol() {
+		return col;
+	}
+
+	public void setCol(int col) {
+		this.col = col;
+	}
+
 	public Node[] children(){
 		return (Node[]) children.toArray(new Node[children.size()]);
 	}
@@ -22,18 +45,6 @@ public class Node {
 		}else{
 			return true;
 		}
-	}
-	
-	public int getChildNodeCount(){
-		return children.size();
-	}
-
-	public void addChildNode(Node child){
-		children.add(child);
-	}
-	
-	public void removeChild(Node child){
-		children.remove(child);
 	}
 	
 	public char getType(){
@@ -51,6 +62,8 @@ public class Node {
 			return 'E';
 		}if(type == NodeType.EXIT){
 			return 'L';
+		}if(type == NodeType.START){
+			return 'S';
 		}else{
 			return ' ';
 		}

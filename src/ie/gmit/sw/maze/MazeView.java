@@ -76,6 +76,12 @@ public class MazeView extends JPanel implements ActionListener{
         				continue;
         			}
         			
+        			if(ch == 'B'){
+        				g2.setColor(Color.CYAN);
+        				g2.fillRect(x1, y1, size, size);
+        				continue;
+        			}
+        			
         			if(ch == 'W'){
         				g2.setColor(Color.BLUE);
         				g2.fillRect(x1, y1, size, size);
