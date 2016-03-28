@@ -5,14 +5,22 @@ import java.util.List;
 
 public class Node {
 	
-	public enum NodeType{START, WALL, WEAPON, PRISONER, BOMB, PLAYER, ENEMY, EXIT, NONE};
+	public enum NodeType{WALL, WEAPON, PRISONER, BOMB, PLAYER, ENEMY, EXIT, NONE};
 	private NodeType type = NodeType.PLAYER;
 	private List<Node> children = new ArrayList<Node>();
-	private List<Node> exits = new ArrayList<Node>();
 	public boolean visited =  false;
-	public boolean goal;
+	public Node goal;
+	public Node start;
 	int row;
 	int col;
+	
+	public void setStart(Node start) {
+		this.start = start;
+	}
+	
+	public Node getStart() {
+		return start;
+	}
 	
 	public Node(int row, int col) {
 		this.row = row;
@@ -61,9 +69,7 @@ public class Node {
 		}if(type == NodeType.ENEMY){
 			return 'E';
 		}if(type == NodeType.EXIT){
-			return 'L';
-		}if(type == NodeType.START){
-			return 'S';
+			return '.';
 		}else{
 			return ' ';
 		}
@@ -82,14 +88,14 @@ public class Node {
 	}
 
 	public boolean isGoalNode(Node node) {
-		if(exits.contains(node))
+		if(node == goal)
 			return true;
-		else
+		else 
 			return false;
 	}
 
-	public void setGoalNode(boolean goal, Node node) {
+	public void setGoalNode(Node goal) {
+		goal.setType(NodeType.EXIT);
 		this.goal = goal;
-		exits.add(node);
 	}
 }

@@ -5,13 +5,17 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import ie.gmit.sw.maze.Maze;
-import ie.gmit.sw.maze.MazeView;
 import ie.gmit.sw.maze.Node;
 import ie.gmit.sw.maze.Node.NodeType;
+import ie.gmit.sw.view.GameOver;
+import ie.gmit.sw.view.MazeView;
 
-public class Runner implements KeyListener{
-	
+public class Runner extends JFrame implements KeyListener{
+
+	private static final long serialVersionUID = 1L;
+
 	private static final int MAZE_DIMENSION = 60;
+	
 	private Node[][] model;
 	private MazeView view;
 	private int currentRow;
@@ -30,21 +34,21 @@ public class Runner implements KeyListener{
     	view.setMinimumSize(d);
     	view.setMaximumSize(d);
     	
-    	JFrame f = new JFrame("Mazogs");
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.addKeyListener(this);
-        f.getContentPane().setLayout(new FlowLayout());
-        f.add(view);
-        f.setSize(1000,900);
-        f.setLocationRelativeTo(null);
-        f.pack();
-        f.setVisible(true);
+    	setTitle("Mazogs");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addKeyListener(this);
+        getContentPane().setLayout(new FlowLayout());
+        add(view);
+        setSize(1000,900);
+        setLocationRelativeTo(null);
+        pack();
+        setVisible(true);
 	}
 	
 	private void placePlayer(){   	
     	currentRow = (int) (MAZE_DIMENSION * Math.random());
     	currentCol = (int) (MAZE_DIMENSION * Math.random());
-    	model[currentRow][currentCol] = new Node(currentRow, currentCol);
+    	model[currentRow][currentCol].getStart();
     	model[currentRow][currentCol].setType(NodeType.PLAYER);
     	updateView();
 	}
@@ -219,6 +223,11 @@ public class Runner implements KeyListener{
 				model[r][c] = new Node(r,c);
 				model[r][c].setType(NodeType.NONE);
 				depthFirstBomb(model[r][c], 3);
+			}if(model[r][c].getType() == '.'){ 
+				model[r][c] = new Node(r,c);
+				model[r][c].setType(NodeType.NONE);
+				new GameOver();
+				this.dispose();
 			}
 			return false; //Can't move
 		}
@@ -231,7 +240,6 @@ public class Runner implements KeyListener{
 						
 			model[row][col] = new Node(row,col);
 			model[row][col].setType(NodeType.NONE);
-
 		}
 	}
 	

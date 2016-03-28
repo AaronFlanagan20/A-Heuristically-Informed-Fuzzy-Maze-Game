@@ -1,10 +1,12 @@
-package ie.gmit.sw.maze;
+package ie.gmit.sw.view;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
 import javax.imageio.*;
 import javax.swing.*;
+
+import ie.gmit.sw.maze.Node;
 
 public class MazeView extends JPanel implements ActionListener{
 	
@@ -76,7 +78,7 @@ public class MazeView extends JPanel implements ActionListener{
         				continue;
         			}
         			
-        			if(ch == 'B'){
+        			if(ch == '.'){
         				g2.setColor(Color.CYAN);
         				g2.fillRect(x1, y1, size, size);
         				continue;
@@ -107,6 +109,8 @@ public class MazeView extends JPanel implements ActionListener{
         			imageIndex = 3;
         		}else if (ch == 'H'){
         			imageIndex = 4;
+        		}else if (ch == '.'){
+            		imageIndex = 20;
         		}else if (ch == 'P'){
         			imageIndex = player_state;    
         		}else if (ch == 'E'){
@@ -156,7 +160,7 @@ public class MazeView extends JPanel implements ActionListener{
 	}
 	
 	private void init() throws Exception{
-		images = new BufferedImage[20];
+		images = new BufferedImage[21];
 		images[0] = ImageIO.read(new java.io.File("resources/wall.png"));
 		images[1] = ImageIO.read(new java.io.File("resources/sword.png"));		
 		images[2] = ImageIO.read(new java.io.File("resources/prisoner.png"));
@@ -176,5 +180,6 @@ public class MazeView extends JPanel implements ActionListener{
 		images[17] = ImageIO.read(new java.io.File("resources/player_midrun_right_sword.png"));
 		images[18] = ImageIO.read(new java.io.File("resources/player_sword_left.png"));
 		images[19] = ImageIO.read(new java.io.File("resources/player_midrun_left_sword.png"));
+		images[20] = ImageIO.read(new java.io.File("resources/stairs_exit.png"));
 	}
 }

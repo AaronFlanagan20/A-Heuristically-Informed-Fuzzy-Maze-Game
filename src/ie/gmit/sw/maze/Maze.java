@@ -55,7 +55,7 @@ public class Maze {
 		MazePoint st = new MazePoint((int)(Math.random()* maze.length),(int)(Math.random()* maze.length),null);
 		
 		maze[st.r][st.c] = new Node(st.r, st.c);
-		maze[st.r][st.c].setType(NodeType.START);
+		maze[st.r][st.c].setStart(maze[st.r][st.c]);
 		
 		mazePoints = new ArrayList<MazePoint>();
         for(int x=-1;x<=1;x++)
@@ -106,7 +106,7 @@ public class Maze {
 
         	// if algorithm has resolved, mark end node
         	if(mazePoints.isEmpty())
-        		maze[last.r][last.c].setGoalNode(true, maze[last.r][last.c]);
+        		maze[last.r][last.c].setGoalNode(maze[last.r][last.c]);
         }
 
 		// print final maze
