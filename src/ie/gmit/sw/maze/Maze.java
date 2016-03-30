@@ -14,6 +14,8 @@ public class Maze {
 		buildMaze();
 		
 		addFeature('W', 'X');
+		addFeature('T', 'X');
+		addFeature('S', 'X');
 		addFeature('?', 'X');
 		addFeature('B', 'X');
 		addFeature('H', 'X');
@@ -29,18 +31,21 @@ public class Maze {
 	}
 		
 	private void addFeature(char feature, char replace){
-		for(int r =0; r < 100; r++){
+		for(int r =0; r < 60; r++){
 			
 			int row = (int) (Math.random() * maze.length);
 			int col = (int) (Math.random() * maze.length);
 			
-			if (maze[row][col].getType() == replace){
+			if (maze[row][col].getType() == replace && maze[row][col].getType() != ' '){
 				if(feature == 'L' && r <=3){
-					maze[row][col].setType(NodeType.WEAPON);
+					maze[row][col].setType(NodeType.SWORD);
 					break;
 				}
+				
 				switch(feature){
-					case 'W': maze[row][col].setType(NodeType.WEAPON); break;
+					case 'W': maze[row][col].setType(NodeType.SWORD); break;
+					case 'S': maze[row][col].setType(NodeType.SPRAY); break;
+					case 'T': maze[row][col].setType(NodeType.TOOTHPICK); break;
 					case '?': maze[row][col].setType(NodeType.PRISONER); break;
 					case 'B': maze[row][col].setType(NodeType.BOMB); break;
 				}
@@ -58,6 +63,7 @@ public class Maze {
 		maze[st.r][st.c].setStart(maze[st.r][st.c]);
 		
 		mazePoints = new ArrayList<MazePoint>();
+		// iterate through direct neighbours of node
         for(int x=-1;x<=1;x++)
         	for(int y=-1;y<=1;y++){
         		if(x==0&&y==0||x!=0&&y!=0)
@@ -84,6 +90,9 @@ public class Maze {
     				// open path between the nodes
     				maze[currentPoint.r][currentPoint.c].setType(NodeType.NONE);
     				maze[oppositePoint.r][oppositePoint.c].setType(NodeType.NONE);
+    				
+    				maze[currentPoint.r][currentPoint.c].addChildNode(maze[oppositePoint.r][oppositePoint.c]);
+    				
 
     				// store last node in order to mark it later
     				last = oppositePoint;

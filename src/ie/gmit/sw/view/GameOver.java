@@ -44,6 +44,7 @@ public class GameOver extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				if(e.getSource() == exit){
 					dispose();
+					System.exit(0);
 				}
 			}
 		});

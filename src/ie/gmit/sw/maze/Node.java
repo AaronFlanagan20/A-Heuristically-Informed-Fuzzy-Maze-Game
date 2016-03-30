@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Node {
 	
-	public enum NodeType{WALL, WEAPON, PRISONER, BOMB, PLAYER, ENEMY, EXIT, NONE};
+	public enum NodeType{WALL, TOOTHPICK, SPRAY, SWORD, PRISONER, BOMB, PLAYER, ENEMY, EXIT, NONE};
 	private NodeType type = NodeType.PLAYER;
 	private List<Node> children = new ArrayList<Node>();
 	public boolean visited =  false;
@@ -43,8 +43,33 @@ public class Node {
 		this.col = col;
 	}
 
-	public Node[] children(){
-		return (Node[]) children.toArray(new Node[children.size()]);
+	public Node[] children(Node[][] maze){
+		
+		Node[] children = new Node[maze.length];
+		if (col - 1 >=0 && type == NodeType.WALL)
+			children[0] = maze[row][col - 1]; //A West edge
+		if (col + 1 < maze[row].length && maze[row][col + 1].getType() == 'X')
+			children[1] = maze[row][col + 1]; //An East Edge
+		if (row - 1 >= 0 && type == NodeType.WALL)
+			children[2] = maze[row - 1][col]; //A North edge
+		if (row + 1 < maze.length && maze[row + 1][col].getType() == 'X')
+			children[3] = maze[row + 1][col]; //An South Edge
+	
+		int counter = 0;
+		for (int i = 0; i < children.length; i++) {
+			if (children[i] != null) counter++;
+		}
+		
+		Node[] tmp = new Node[counter];
+		int index = 0;
+		for (int i = 0; i < children.length; i++) {
+			if (children[i] != null){
+				tmp[index] = children[i];
+				index++;
+			}
+		}
+
+		return tmp;
 	}
 	
 	public boolean isLeaf(){
@@ -58,8 +83,12 @@ public class Node {
 	public char getType(){
 		if(type == NodeType.WALL){
 			return 'X';
-		}if(type == NodeType.WEAPON){
+		}if(type == NodeType.SWORD){
 			return 'W';
+		}if(type == NodeType.SPRAY){
+			return 'S';
+		}if(type == NodeType.TOOTHPICK){
+			return 'T';
 		}if(type == NodeType.PRISONER){
 			return '?';
 		}if(type == NodeType.BOMB){
@@ -85,6 +114,18 @@ public class Node {
 
 	public void setVisited(boolean visited) {
 		this.visited = visited;
+	}
+	
+	public int getChildNodeCount(){
+		return children.size();
+	}
+
+	public void addChildNode(Node child){
+		children.add(child);
+	}
+	
+	public void removeChild(Node child){
+		children.remove(child);
 	}
 
 	public boolean isGoalNode(Node node) {

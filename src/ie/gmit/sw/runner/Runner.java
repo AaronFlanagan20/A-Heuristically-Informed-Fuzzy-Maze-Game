@@ -1,14 +1,22 @@
 package ie.gmit.sw.runner;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
 
-import ie.gmit.sw.maze.Maze;
-import ie.gmit.sw.maze.Node;
+import javax.swing.JFrame;
+
+import ie.gmit.sw.fuzzylogic.Fighting;
+import ie.gmit.sw.maze.*;
 import ie.gmit.sw.maze.Node.NodeType;
-import ie.gmit.sw.view.GameOver;
-import ie.gmit.sw.view.MazeView;
+import ie.gmit.sw.view.*;
 
 public class Runner extends JFrame implements KeyListener{
 
@@ -20,15 +28,20 @@ public class Runner extends JFrame implements KeyListener{
 	private MazeView view;
 	private int currentRow;
 	private int currentCol;
+	private Thread[] enemies;
+	private Map<Node, Integer> enemiesHealth;
 	
 	public Runner() throws Exception{
 		Maze m = new Maze(MAZE_DIMENSION, MAZE_DIMENSION);//60 X 60 MAZE
 		model = m.getMaze();
     	view = new MazeView(model);
+
+    	enemies = new Thread[11];//thread for each enemy
+    	enemiesHealth = new HashMap<Node, Integer>();//strength value for each enemy
     	
     	placePlayer();
     	placeEnemy();
-    	    	
+    		    	
     	Dimension d = new Dimension(MazeView.DEFAULT_VIEW_SIZE, MazeView.DEFAULT_VIEW_SIZE);
     	view.setPreferredSize(d);
     	view.setMinimumSize(d);
@@ -43,6 +56,10 @@ public class Runner extends JFrame implements KeyListener{
         setLocationRelativeTo(null);
         pack();
         setVisible(true);
+        
+        for(Thread t : enemies){
+			t.start();
+		}
 	}
 	
 	private void placePlayer(){   	
@@ -59,13 +76,105 @@ public class Runner extends JFrame implements KeyListener{
 			int col = (int) (MAZE_DIMENSION * Math.random());
 			model[row][col] = new Node(row,col);
 			model[row][col].setType(NodeType.ENEMY);
-			Thread t = new Thread(){
+			Thread t = new Thread(new Runnable() {
 				public void run() {
-					super.run();
+					int num = (int)(Math.random() * 10);
+					if(num >= 5)
+						bruteForce(model, model[row][col], view, true);
+					else
+						bruteForce(model, model[row][col], view, false);
+					
+					
 				}
-			};
-			t.start();
+			});
+			enemies[i] = t;
 		}
+	}
+	
+	private void bruteForce(Node[][] maze, Node node, Component viewer, boolean lifo){
+		LinkedList<Node> queue = new LinkedList<Node>();
+		queue.add(node);
+				
+		int num = (int)(Math.random() * 10);
+		
+		switch(num){
+			case 1: enemiesHealth.put(node, 1); break;
+			case 2: enemiesHealth.put(node, 2); break;
+			case 3: enemiesHealth.put(node, 3); break;
+			case 4: enemiesHealth.put(node, 4); break;
+			case 5: enemiesHealth.put(node, 5); break;
+			case 6: enemiesHealth.put(node, 7); break;
+			case 7: enemiesHealth.put(node, 5); break;
+			case 8: enemiesHealth.put(node, 8); break;
+			case 9: enemiesHealth.put(node, 5); break;
+			case 10: enemiesHealth.put(node, 9); break;
+	}
+		
+		System.out.println(node.getRow() + " " + node.getCol());
+				
+		while (!queue.isEmpty()){
+			
+			Node next = queue.poll();
+			
+			if(next != null){
+				next.setVisited(true);
+				
+				try{
+					Node[] children = next.children(maze);
+				 	for (int i = 0; i < children.length; i++) {
+				 		if (!children[i].isVisited()){
+				 			children[i-1].setType(NodeType.NONE);
+				 			children[i].setType(NodeType.ENEMY);
+				 			if(lifo){
+				 				queue.addFirst(children[i]);
+				 			}else{
+				 				queue.addLast(children[i]);
+				 			}
+				 		}
+					}
+				}catch(ArrayIndexOutOfBoundsException e){
+					
+				}
+			}
+		}
+		
+//		while(it.hasNext()){
+//			Node next = queue.poll();
+//			next.setType(NodeType.ENEMY);
+//			
+//			if(next != null){
+//				next.setVisited(true);
+//				
+//				Node[] children = next.children(maze);
+//			 	for (int i = 0; i < children.length; i++) {
+//			 		if (!children[i].isVisited()){
+//			 			if(lifo){
+//			 				queue.addFirst(children[i]);
+//			 			}else{
+//			 				queue.addLast(children[i]);
+//			 			}
+//			 		}
+//				}
+//			}
+//		}
+//		while(true){		
+//			
+//			try { //Simulate processing each expanded node
+//				Thread.sleep(1);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//			
+//			//Pick a random adjacent node
+//        	Node[] children = node.children(maze);
+//        	System.out.println(children.length);
+//        	if(children.length > 0){
+//        		//node.setType(NodeType.NONE);
+//        		node = children[(int)(children.length * Math.random())];
+//        		node.setType(NodeType.ENEMY);
+//        		view.repaint();
+//        	}
+//		}
 	}
 	
 	private void updateView(){
@@ -219,15 +328,49 @@ public class Runner extends JFrame implements KeyListener{
 				MazeView.hasSword = true;
 				MazeView.direction = 7;
 				view.repaint();
-			}if(model[r][c].getType() == 'B'){ 
+			}
+			
+			if(model[r][c].getType() == 'S' && !MazeView.hasSword){
+				model[r][c].setType(NodeType.WALL);
+				MazeView.hasSword = true;
+				MazeView.direction = 7;
+				view.repaint();
+			}
+			
+			if(model[r][c].getType() == 'T' && !MazeView.hasSword){
+				model[r][c].setType(NodeType.WALL);
+				MazeView.hasSword = true;
+				MazeView.direction = 7;
+				view.repaint();
+			}
+			
+			if(model[r][c].getType() == 'B'){ 
 				model[r][c] = new Node(r,c);
 				model[r][c].setType(NodeType.NONE);
 				blowUpBomb(model[r][c], 3);
-			}if(model[r][c].getType() == '.'){ 
+			}
+			
+			if(model[r][c].getType() == '.'){ 
 				model[r][c] = new Node(r,c);
 				model[r][c].setType(NodeType.NONE);
 				new GameOver();
 				this.dispose();
+			}
+			
+			if(model[r][c].getType() == 'E'){ 
+								
+				double damage = Fighting.fight(5, enemiesHealth.get(model[r][c]));
+				System.out.println(damage);
+				double health = 100.0;
+				
+				health -= damage;
+				
+				if(health <= 0){
+					model[r][c].setType(NodeType.NONE);
+				}else{
+					new GameOver();
+					this.dispose();
+				}
 			}
 			return false; //Can't move
 		}
@@ -236,13 +379,21 @@ public class Runner extends JFrame implements KeyListener{
 	private void blowUpBomb(Node node, int depth){
 		int row = node.getRow();
 		int col = node.getCol();
-		for(int i = 0; i < depth; i++){
-			for(int x = row; x < row + 3; x++){
-				for(int y = col; y < col + 3; y++){
-					if(model[x][y].getType() != 'P')
-						model[x][y].setType(NodeType.NONE);
+		try{
+			for(int i = 0; i < depth; i++){
+				for(int x = row; x < row + 3; x++){
+					for(int y = col; y < col + 3; y++){
+						try{
+							if(model[x][y].getType() != 'P' && model[x][y].getType() != '.')
+								model[x][y].setType(NodeType.NONE);
+						}catch(NullPointerException e){
+							
+						}
+					}
 				}
 			}
+		}catch(NullPointerException e){
+			
 		}
 	}
 	

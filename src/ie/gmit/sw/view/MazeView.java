@@ -25,6 +25,7 @@ public class MazeView extends JPanel implements ActionListener{
 	private int currentCol;
 	private boolean zoomOut = false;
 	private int imageIndex = -1;
+	private int enemyStrength = 0; // between 1 - 10
 	
 	public MazeView(Node[][] maze) throws Exception{
 		this.maze = maze;
@@ -84,7 +85,7 @@ public class MazeView extends JPanel implements ActionListener{
         				continue;
         			}
         			
-        			if(ch == 'W'){
+        			if(ch == 'W' || ch == 'S' || ch == 'T'){
         				g2.setColor(Color.BLUE);
         				g2.fillRect(x1, y1, size, size);
         				continue;
@@ -111,6 +112,10 @@ public class MazeView extends JPanel implements ActionListener{
         			imageIndex = 4;
         		}else if (ch == '.'){
             		imageIndex = 20;
+        		}else if (ch == 'T'){
+            		imageIndex = 21;
+        		}else if (ch == 'S'){
+            		imageIndex = 22;
         		}else if (ch == 'P'){
         			imageIndex = player_state;    
         		}else if (ch == 'E'){
@@ -160,7 +165,7 @@ public class MazeView extends JPanel implements ActionListener{
 	}
 	
 	private void init() throws Exception{
-		images = new BufferedImage[21];
+		images = new BufferedImage[23];
 		images[0] = ImageIO.read(new java.io.File("resources/wall.png"));
 		images[1] = ImageIO.read(new java.io.File("resources/sword.png"));		
 		images[2] = ImageIO.read(new java.io.File("resources/prisoner.png"));
@@ -181,5 +186,7 @@ public class MazeView extends JPanel implements ActionListener{
 		images[18] = ImageIO.read(new java.io.File("resources/player_sword_left.png"));
 		images[19] = ImageIO.read(new java.io.File("resources/player_midrun_left_sword.png"));
 		images[20] = ImageIO.read(new java.io.File("resources/stairs_exit.png"));
+		images[21] = ImageIO.read(new java.io.File("resources/toothpick.png"));
+		images[22] = ImageIO.read(new java.io.File("resources/spiderspray.png"));
 	}
 }

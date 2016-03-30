@@ -1,0 +1,45 @@
+FUNCTION_BLOCK fight	// Block definition (there may be more than one block per file)
+
+VAR_INPUT				// Define input variables
+	weapon : REAL;		// crisp in, fuzzy, crisp out
+	opponent: REAL;
+END_VAR
+
+VAR_OUTPUT				// Define output variable
+	damage : REAL;
+END_VAR
+
+FUZZIFY weapon			// Fuzzify input variable 'weapon': {'weak', 'strong' , 'powerful'}
+	TERM weak := (0, 0) (3, 1) ; 
+	TERM strong := (3,0) (6,1) (8,1);
+	TERM powerful := (8, 0) (10, 1);
+END_FUZZIFY
+
+FUZZIFY opponent			// Fuzzify input variable 'opponent': { 'weak', 'strong' }
+	TERM weak := (0, 1) (1,1) (4,1) (5,0) ;
+	TERM strong := (5,0) (6,1) (8,1) (10,1);
+END_FUZZIFY
+
+DEFUZZIFY damage // Defuzzify output variable 'damage' : {'quarter', 'medium', 'all' }
+	TERM none := (0,0);
+	TERM quarter := (0,0) (2,1);
+	TERM medium := (2,1) (5,0);
+	TERM all := (5,0) (10,1);
+	METHOD : COG;		// Use 'Center Of Gravity' defuzzification method
+	DEFAULT := 0;		// Default value is 0 (if no rule activates defuzzifier)
+END_DEFUZZIFY
+
+RULEBLOCK No1
+	AND : MIN;			// Use 'min' for 'and' (also implicit use 'max' for 'or' to fulfill DeMorgan's Law)
+	ACT : MIN;			// Use 'min' activation method
+	ACCU : MAX;			// Use 'max' accumulation method
+
+	RULE 1 : IF weapon IS weak AND opponent is weak THEN damage is quarter;
+	RULE 2 : IF weapon IS strong AND opponent is weak THEN damage is medium;
+	RULE 3 : IF weapon IS powerful AND opponent is weak THEN damage is all;
+	RULE 3 : IF weapon IS weak AND opponent is strong THEN damage is none;
+	RULE 4 : IF weapon IS strong AND opponent is strong THEN damage is medium;
+	RULE 5 : IF weapon IS powerful AND opponent is strong THEN damage is all;
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK
