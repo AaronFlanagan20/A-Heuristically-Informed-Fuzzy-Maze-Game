@@ -11,7 +11,7 @@ END_VAR
 
 FUZZIFY weapon			// Fuzzify input variable 'weapon': {'weak', 'strong' , 'powerful'}
 	TERM weak := (0, 0) (3, 1) ; 
-	TERM strong := (3,0) (6,1) (8,1);
+	TERM strong := (4,0) (6,1) (7,1);
 	TERM powerful := (8, 0) (10, 1);
 END_FUZZIFY
 
@@ -23,7 +23,7 @@ END_FUZZIFY
 DEFUZZIFY damage // Defuzzify output variable 'damage' : {'quarter', 'medium', 'all' }
 	TERM none := (0,0);
 	TERM quarter := (0,0) (2,1);
-	TERM medium := (2,1) (5,0);
+	TERM medium := (3,1) (5,0);
 	TERM all := (5,0) (10,1);
 	METHOD : COG;		// Use 'Center Of Gravity' defuzzification method
 	DEFAULT := 0;		// Default value is 0 (if no rule activates defuzzifier)

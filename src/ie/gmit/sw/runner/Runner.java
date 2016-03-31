@@ -5,9 +5,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Deque;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -30,6 +28,8 @@ public class Runner extends JFrame implements KeyListener{
 	private int currentCol;
 	private Thread[] enemies;
 	private Map<Node, Integer> enemiesHealth;
+	private int weaponStrength = 0;
+	private int playerHealth = 100;
 	
 	public Runner() throws Exception{
 		Maze m = new Maze(MAZE_DIMENSION, MAZE_DIMENSION);//60 X 60 MAZE
@@ -109,9 +109,7 @@ public class Runner extends JFrame implements KeyListener{
 			case 9: enemiesHealth.put(node, 5); break;
 			case 10: enemiesHealth.put(node, 9); break;
 	}
-		
-		System.out.println(node.getRow() + " " + node.getCol());
-				
+			
 		while (!queue.isEmpty()){
 			
 			Node next = queue.poll();
@@ -327,6 +325,7 @@ public class Runner extends JFrame implements KeyListener{
 				model[r][c].setType(NodeType.WALL);
 				MazeView.hasSword = true;
 				MazeView.direction = 7;
+				weaponStrength = 7;
 				view.repaint();
 			}
 			
@@ -334,6 +333,7 @@ public class Runner extends JFrame implements KeyListener{
 				model[r][c].setType(NodeType.WALL);
 				MazeView.hasSword = true;
 				MazeView.direction = 7;
+				weaponStrength = 10;
 				view.repaint();
 			}
 			
@@ -341,6 +341,7 @@ public class Runner extends JFrame implements KeyListener{
 				model[r][c].setType(NodeType.WALL);
 				MazeView.hasSword = true;
 				MazeView.direction = 7;
+				weaponStrength = 3;
 				view.repaint();
 			}
 			
@@ -358,19 +359,36 @@ public class Runner extends JFrame implements KeyListener{
 			}
 			
 			if(model[r][c].getType() == 'E'){ 
-								
-				double damage = Fighting.fight(5, enemiesHealth.get(model[r][c]));
-				System.out.println(damage);
-				double health = 100.0;
+				
+				double result = Fighting.fight(weaponStrength, enemiesHealth.get(model[r][c]));
+				int damage = (int) Math.round(result);
+				int health = 10;
 				
 				health -= damage;
-				
+								
 				if(health <= 0){
 					model[r][c].setType(NodeType.NONE);
+					MazeView.direction = 2;
+					playerHealth = 100;
+				}else if(health >= 1 && health <= 5){
+					MazeView.direction = 2;
+					playerHealth-= 25;
+				}else if(health >= 5 && health <= 8){
+					MazeView.direction = 2;
+					playerHealth-= 75;
 				}else{
-					new GameOver();
-					this.dispose();
+					MazeView.direction = 2;
+					playerHealth = 0;
 				}
+				
+				if(playerHealth <= 0){
+		        	new GameOver();
+					this.dispose();
+					MazeView.direction = 2;
+		        }
+				
+				MazeView.hasSword = false;
+				view.repaint();
 			}
 			return false; //Can't move
 		}
@@ -379,7 +397,6 @@ public class Runner extends JFrame implements KeyListener{
 	private void blowUpBomb(Node node, int depth){
 		int row = node.getRow();
 		int col = node.getCol();
-		try{
 			for(int i = 0; i < depth; i++){
 				for(int x = row; x < row + 3; x++){
 					for(int y = col; y < col + 3; y++){
@@ -392,9 +409,6 @@ public class Runner extends JFrame implements KeyListener{
 					}
 				}
 			}
-		}catch(NullPointerException e){
-			
-		}
 	}
 	
 	public static void main(String[] args) throws Exception{

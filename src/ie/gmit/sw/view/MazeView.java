@@ -25,7 +25,6 @@ public class MazeView extends JPanel implements ActionListener{
 	private int currentCol;
 	private boolean zoomOut = false;
 	private int imageIndex = -1;
-	private int enemyStrength = 0; // between 1 - 10
 	
 	public MazeView(Node[][] maze) throws Exception{
 		this.maze = maze;
