@@ -390,10 +390,20 @@ public class Runner extends JFrame implements KeyListener{
 				MazeView.hasSword = false;
 				view.repaint();
 			}
+			
+			if(model[r][c].getType() == '?'){ 
+				model[r][c] = new Node(r,c);
+				exitSearch();
+			}
+			
 			return false; //Can't move
 		}
 	}
 	
+	private void exitSearch() {
+		
+	}
+
 	private void blowUpBomb(Node node, int depth){
 		int row = node.getRow();
 		int col = node.getCol();
@@ -403,8 +413,8 @@ public class Runner extends JFrame implements KeyListener{
 						try{
 							if(model[x][y].getType() != 'P' && model[x][y].getType() != '.')
 								model[x][y].setType(NodeType.NONE);
-						}catch(NullPointerException e){
-							
+						}catch(Exception e){
+							//only throws when bomb is near corner or wall
 						}
 					}
 				}

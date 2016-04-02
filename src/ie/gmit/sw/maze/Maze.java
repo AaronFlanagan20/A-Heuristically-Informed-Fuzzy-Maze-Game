@@ -91,7 +91,6 @@ public class Maze {
     				maze[currentPoint.r][currentPoint.c].setType(NodeType.NONE);
     				maze[oppositePoint.r][oppositePoint.c].setType(NodeType.NONE);
     				
-    				maze[currentPoint.r][currentPoint.c].addChildNode(maze[oppositePoint.r][oppositePoint.c]);
     				
 
     				// store last node in order to mark it later
