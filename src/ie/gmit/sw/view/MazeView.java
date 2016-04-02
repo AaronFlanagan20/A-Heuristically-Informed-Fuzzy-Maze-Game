@@ -96,7 +96,7 @@ public class MazeView extends JPanel implements ActionListener{
         				continue;
         			}
         		}else{
-        			ch = maze[currentRow - cellpadding + row][currentCol - cellpadding + col].getType();
+        				ch = maze[currentRow - cellpadding + row][currentCol - cellpadding + col].getType();
         		}
         		
         		if (ch == 'X'){        			

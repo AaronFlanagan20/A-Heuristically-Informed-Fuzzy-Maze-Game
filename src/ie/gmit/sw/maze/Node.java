@@ -3,7 +3,7 @@ package ie.gmit.sw.maze;
 public class Node {
 	
 	public enum NodeType{WALL, TOOTHPICK, SPRAY, SWORD, PRISONER, BOMB, PLAYER, ENEMY, EXIT, NONE};
-	private NodeType type = NodeType.PLAYER;
+	private NodeType type = NodeType.NONE;
 	public boolean visited =  false;
 	public Node goal;
 	public Node start;
