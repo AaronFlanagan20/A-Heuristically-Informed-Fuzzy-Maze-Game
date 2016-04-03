@@ -1,5 +1,13 @@
 package ie.gmit.sw.maze;
 
+/**
+ * Node.java is used to set all the walls and features within the maze
+ * Each feature in the maze is a Node object 
+ * 
+ * 
+ * @author Aaron - G00330035
+ *
+ */
 public class Node {
 	
 	public enum NodeType{WALL, TOOTHPICK, SPRAY, SWORD, PRISONER, BOMB, PLAYER, ENEMY, EXIT, NONE};

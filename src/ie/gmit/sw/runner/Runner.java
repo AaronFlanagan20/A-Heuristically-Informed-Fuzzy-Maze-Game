@@ -16,6 +16,19 @@ import ie.gmit.sw.maze.*;
 import ie.gmit.sw.maze.Node.NodeType;
 import ie.gmit.sw.view.*;
 
+/**
+ * Runner.java is the main class. It creates a mazeView object, sets it's dimensions and adds it to the frame.
+ * It places players and enemies on screen, performs collision detection and uses
+ * keylisteners to determine where the user is moving.
+ * 
+ * The Fuzzy-Maze-Game.jar can be run on the command-line using the following command: java –cp ./Fuzzy-Maze-Game.jar ie.gmit.sw.runner.Runner
+ * 
+ * @author Aaron - G00330035
+ * 
+ * @see Maze
+ * @see MazeView
+ * @see Node
+ */
 public class Runner extends JFrame implements KeyListener{
 
 	private static final long serialVersionUID = 1L;
@@ -31,6 +44,13 @@ public class Runner extends JFrame implements KeyListener{
 	private int weaponStrength = 0;
 	private int playerHealth = 100;
 	
+	/**
+	 * Add in MazeView, create a Thread array for enemies to move and a list to store the enemy and their health
+	 * 
+	 * place players and enemies on screen and start up the frame
+	 * 
+	 * @throws Exception to handle A FileNotFoundException in MazeView
+	 */
 	public Runner() throws Exception{
 		Maze m = new Maze(MAZE_DIMENSION, MAZE_DIMENSION);//60 X 60 MAZE
 		model = m.getMaze();
@@ -52,7 +72,7 @@ public class Runner extends JFrame implements KeyListener{
         addKeyListener(this);
         getContentPane().setLayout(new FlowLayout());
         add(view);
-        setSize(1000,900);
+        setSize(1000,1000);
         setLocationRelativeTo(null);
         pack();
         setVisible(true);
@@ -62,14 +82,20 @@ public class Runner extends JFrame implements KeyListener{
 		}
 	}
 	
+	/**
+	 * Place player randomly in maze
+	 */
 	private void placePlayer(){   	
     	currentRow = (int) (MAZE_DIMENSION * Math.random());
     	currentCol = (int) (MAZE_DIMENSION * Math.random());
-    	model[currentRow][currentCol].getStart();
     	model[currentRow][currentCol].setType(NodeType.PLAYER);
     	updateView();
 	}
 	
+	/**
+	 * Place 10 enemies in random positions and create a thread for them
+	 * 
+	 */
 	private void placeEnemy(){
 		for(int i = 0; i < 11; i++){
 			int row = (int) (MAZE_DIMENSION * Math.random());
@@ -91,6 +117,14 @@ public class Runner extends JFrame implements KeyListener{
 		}
 	}
 	
+	/**
+	 * This method determines how the user moves independently through the maze and determines how the strong the enemy will be
+	 * 
+	 * @param maze
+	 * @param node
+	 * @param viewer
+	 * @param lifo
+	 */
 	private void bruteForce(Node[][] maze, Node node, Component viewer, boolean lifo){
 		LinkedList<Node> queue = new LinkedList<Node>();
 		queue.add(node);
@@ -175,6 +209,9 @@ public class Runner extends JFrame implements KeyListener{
 //		}
 	}
 	
+	/**
+	 * Check where the user is and adjust accordingly
+	 */
 	private void updateView(){
 		view.setCurrentRow(currentRow);
 		view.setCurrentCol(currentCol);
@@ -315,6 +352,10 @@ public class Runner extends JFrame implements KeyListener{
     
 	public void keyTyped(KeyEvent e) {} //Ignore
 
+	/**
+	 * Performs collision detection and fires method calls based on a feature that is walked in to
+	 * 
+	 */
 	private boolean isValidMove(int r, int c){
 		if (r <= model.length - 1 && c <= model[r].length - 1 && model[r][c].getType() == ' '){
 			model[currentRow][currentCol].setType(NodeType.NONE);
@@ -360,7 +401,7 @@ public class Runner extends JFrame implements KeyListener{
 			
 			if(model[r][c].getType() == 'E'){ 
 				
-				double result = Fighting.fight(weaponStrength, enemiesHealth.get(model[r][c]));
+				double result = Fighting.fight(weaponStrength, enemiesHealth.get(model[r][c]));//TODO: NullPointer thrown on node sometimes 
 				int damage = (int) Math.round(result);
 				int health = 10;
 				
@@ -400,10 +441,19 @@ public class Runner extends JFrame implements KeyListener{
 		}
 	}
 	
+	/**
+	 * Heuristic algorithm not yet implemented
+	 */
 	private void exitSearch() {
 		
 	}
 
+	/**
+	 * destroys n amount of rows and columns to it's right
+	 * 
+	 * @param node
+	 * @param depth
+	 */
 	private void blowUpBomb(Node node, int depth){
 		int row = node.getRow();
 		int col = node.getCol();

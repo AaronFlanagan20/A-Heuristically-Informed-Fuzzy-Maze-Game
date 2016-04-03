@@ -1,1 +1,4 @@
 # A-Heuristically-Informed-Fuzzy-Maze-Game
+
+# Background
+This project was developed for my 4th year of Software Development module Artificial Intelligence. It combines a maze generation algorithm, with fuzzy logic and some uniformed and informed search algoritms. The maze generation algorithm used is called Prim's. Examples found [here](https://en.wikipedia.org/wiki/Maze_generation_algorithm#Randomized_Prim.27s_algorithm) and [here](http://jonathanzong.com/blog/2012/11/06/maze-generation-with-prims-algorithm). The JFuzzyLogic API used is found [here](http://jfuzzylogic.sourceforge.net/html/manual.html#fcl) this was used for it's fuzzy constraint langauge. The project brief has been added to this repository also under [aiAssignment2016.pdf](aiAssignment2016.pdf).

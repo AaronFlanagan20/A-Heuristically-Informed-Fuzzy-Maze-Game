@@ -13,6 +13,13 @@ import javax.swing.JPanel;
 
 import ie.gmit.sw.runner.Runner;
 
+/**
+ * 
+ * GameOver is just a quick screen to show the game is finished and allow the user to replay
+ * 
+ * @author Aaron - G00330035
+ *
+ */
 public class GameOver extends JFrame{
 	
 	private static final long serialVersionUID = 1L;

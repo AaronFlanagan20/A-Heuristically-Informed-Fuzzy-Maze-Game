@@ -4,23 +4,41 @@ import java.util.ArrayList;
 
 import ie.gmit.sw.maze.Node.NodeType;
 
+/**
+ * 
+ * Maze.java is responsible for the creation of the maze. It first sets the maze to be all walls.
+ * It uses Prim's algorithm to pick a node at random and a node opposite to it and set the middle node to nothing.
+ * It then loops through all of it's direct neighbours and repeats the process. The player will be set to the first random node.
+ * The exit will e set to the last node.
+ * 
+ * It also generates and places weapons, bombs and prisoners and randomly place them around the maze.
+ * 
+ * @@author Aaron - G00330035
+ *
+ * @see Node
+ * 
+ */
 public class Maze {
 	private Node[][] maze;
 	private ArrayList<MazePoint> mazePoints;
 	
 	public Maze(int rows, int cols){
 		maze = new Node[rows][cols];
-		init();
-		buildMaze();
+		init();//set everthing to walls 'X'
+		buildMaze();//run random generation algorithm
 		
-		addFeature('W', 'X');
-		addFeature('T', 'X');
-		addFeature('S', 'X');
-		addFeature('?', 'X');
-		addFeature('B', 'X');
-		addFeature('H', 'X');
+		//add set of features
+		addFeature('W', 'X');//sword
+		addFeature('T', 'X');//toothpick
+		addFeature('S', 'X');//spiderspray
+		addFeature('?', 'X');//prisoners
+		addFeature('B', 'X');//bombs
 	}
 	
+	
+	/**
+	 * Loop through all the rows and columns and set them to walls
+	 */
 	private void init(){
 		for(int row = 0; row < maze.length; row++){
 			for(int col = 0; col < maze[row].length; col++){
@@ -30,6 +48,11 @@ public class Maze {
 		}
 	}
 		
+	/**
+	 * Choose a random number row and col between 1 and maze size and set it to whatever type is currently being checked
+	 * @param feature
+	 * @param replace
+	 */
 	private void addFeature(char feature, char replace){
 		for(int r =0; r < 60; r++){
 			
@@ -53,6 +76,11 @@ public class Maze {
 		}
 	}
 	
+	/**
+	 * Pick a start node, loop through it's neighbours and add them to a queue of possible nodes.
+	 * 
+	 * Then loop through the list and pick the current node and it's opposite and set in between them to nothing.
+	 */
 	private void buildMaze(){
 		
 		// Adapted from http://jonathanzong.com/blog/2012/11/06/maze-generation-with-prims-algorithm
@@ -129,6 +157,12 @@ public class Maze {
 		return this.maze;
 	}
 	
+	/**
+	 * Maze point acts as a Data transfer object and stores the points randomly decided within the list
+	 * 
+	 * It also finds the opposite node to the current node being used
+	 *
+	 */
 	private class MazePoint{
     	private Integer r;
     	private Integer c;

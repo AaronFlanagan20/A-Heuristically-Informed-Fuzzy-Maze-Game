@@ -1,13 +1,32 @@
 package ie.gmit.sw.view;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.*;
-import javax.imageio.*;
-import javax.swing.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 
+import javax.imageio.ImageIO;
+import javax.swing.JPanel;
+import javax.swing.Timer;
+
+import ie.gmit.sw.maze.Maze;
 import ie.gmit.sw.maze.Node;
+import ie.gmit.sw.runner.Runner;
 
+
+/**
+ * MazeView.java is JPanel that will be added to the main running JFrame
+ * It uses the maze and checks all the values, 'X', 'W' etc and paints images according to them
+ * 
+ * It also allows for a zoomout feature that simulates looking over the maze.
+ * 
+ * @author Aaron - G00330035
+ *
+ *@see Maze
+ *@see Runner
+ */
 public class MazeView extends JPanel implements ActionListener{
 	
 	private static final long serialVersionUID = 1L;
@@ -31,10 +50,11 @@ public class MazeView extends JPanel implements ActionListener{
 		init();
 		setBackground(Color.LIGHT_GRAY);
 		setDoubleBuffered(true);
-		timer = new Timer(300, this);
+		timer = new Timer(350, this);//how long to wait before actionevent is triggered on panel
 		timer.start();
 	}
 	
+	//check where the player is and set the panel view accordingly
 	public void setCurrentRow(int row) {
 		if (row < cellpadding){
 			currentRow = cellpadding;
@@ -45,6 +65,7 @@ public class MazeView extends JPanel implements ActionListener{
 		}
 	}
 
+	//check where the player is and set the panel view accordingly
 	public void setCurrentCol(int col) {
 		if (col < cellpadding){
 			currentCol = cellpadding;
@@ -55,6 +76,14 @@ public class MazeView extends JPanel implements ActionListener{
 		}
 	}
 
+	/**
+	 * This method checks if the zoomout it enabled, if not it paints 5 squares/nodes on screen using cellspan
+	 * and cellpadding is used to position the player within them nodes.
+	 * 
+	 * It uses a counter imageindex to determine what image to paint by referring the number to BufferedImage array below
+	 * 
+	 * 
+	 */
 	public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
@@ -96,7 +125,7 @@ public class MazeView extends JPanel implements ActionListener{
         				continue;
         			}
         		}else{
-        				ch = maze[currentRow - cellpadding + row][currentCol - cellpadding + col].getType();
+        			ch = maze[currentRow - cellpadding + row][currentCol - cellpadding + col].getType();
         		}
         		
         		if (ch == 'X'){        			
@@ -107,8 +136,6 @@ public class MazeView extends JPanel implements ActionListener{
         			imageIndex = 2;
         		}else if (ch == 'B'){
         			imageIndex = 3;
-        		}else if (ch == 'H'){
-        			imageIndex = 4;
         		}else if (ch == '.'){
             		imageIndex = 20;
         		}else if (ch == 'T'){
@@ -137,6 +164,9 @@ public class MazeView extends JPanel implements ActionListener{
 		zoomOut = !zoomOut;		
 	}
 
+	/**
+	 * The timer triggers events every 3.5 seconds to change the enemy_state and player_state, this simulates the movement
+	 */
 	public void actionPerformed(ActionEvent e) {	
 		switch(direction){
 			case 0: player_state = 8; break;//up
@@ -163,6 +193,10 @@ public class MazeView extends JPanel implements ActionListener{
 		this.repaint();
 	}
 	
+	/**
+	 * Setup and store all images needed to paint on screen
+	 * @throws Exception
+	 */
 	private void init() throws Exception{
 		images = new BufferedImage[23];
 		images[0] = ImageIO.read(new java.io.File("resources/wall.png"));
