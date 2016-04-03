@@ -43,7 +43,7 @@ public class Runner extends JFrame implements KeyListener{
 	private Map<Node, Integer> enemiesHealth;
 	private int weaponStrength = 0;
 	private int playerHealth = 100;
-	
+
 	/**
 	 * Add in MazeView, create a Thread array for enemies to move and a list to store the enemy and their health
 	 * 
@@ -56,7 +56,7 @@ public class Runner extends JFrame implements KeyListener{
 		model = m.getMaze();
     	view = new MazeView(model);
 
-    	enemies = new Thread[11];//thread for each enemy
+    	enemies = new Thread[10];//thread for each enemy
     	enemiesHealth = new HashMap<Node, Integer>();//strength value for each enemy
     	
     	placePlayer();
@@ -76,10 +76,10 @@ public class Runner extends JFrame implements KeyListener{
         setLocationRelativeTo(null);
         pack();
         setVisible(true);
-        
-        for(Thread t : enemies){
-			t.start();
-		}
+
+        for(Thread t: enemies){
+        	t.start();
+        }
 	}
 	
 	/**
@@ -96,21 +96,22 @@ public class Runner extends JFrame implements KeyListener{
 	 * Place 10 enemies in random positions and create a thread for them
 	 * 
 	 */
+	
 	private void placeEnemy(){
-		for(int i = 0; i < 11; i++){
+		for(int i = 0; i < 10; i++){
 			int row = (int) (MAZE_DIMENSION * Math.random());
 			int col = (int) (MAZE_DIMENSION * Math.random());
 			model[row][col] = new Node(row,col);
 			model[row][col].setType(NodeType.ENEMY);
 			Thread t = new Thread(new Runnable() {
 				public void run() {
-					int num = (int)(Math.random() * 10);
-					if(num >= 5)
-						bruteForce(model, model[row][col], view, true);
-					else
-						bruteForce(model, model[row][col], view, false);
-					
-					
+					while(true){
+						int num = (int)(Math.random() * 10);
+						if(num >= 5)
+							bruteForce(model, model[row][col], view, true);
+						else
+							bruteForce(model, model[row][col], view, false);
+					}
 				}
 			});
 			enemies[i] = t;
@@ -155,7 +156,7 @@ public class Runner extends JFrame implements KeyListener{
 					Node[] children = next.children(maze);
 				 	for (int i = 0; i < children.length; i++) {
 				 		if (!children[i].isVisited()){
-				 			children[i-1].setType(NodeType.NONE);
+				 			//children[i-1].setType(NodeType.NONE);
 				 			children[i].setType(NodeType.ENEMY);
 				 			if(lifo){
 				 				queue.addFirst(children[i]);
@@ -166,6 +167,13 @@ public class Runner extends JFrame implements KeyListener{
 					}
 				}catch(ArrayIndexOutOfBoundsException e){
 					
+				}
+				
+				try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}

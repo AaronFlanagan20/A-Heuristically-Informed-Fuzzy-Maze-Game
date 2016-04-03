@@ -50,7 +50,7 @@ public class MazeView extends JPanel implements ActionListener{
 		init();
 		setBackground(Color.LIGHT_GRAY);
 		setDoubleBuffered(true);
-		timer = new Timer(350, this);//how long to wait before actionevent is triggered on panel
+		timer = new Timer(200, this);//how long to wait before actionevent is triggered on panel
 		timer.start();
 	}
 	
