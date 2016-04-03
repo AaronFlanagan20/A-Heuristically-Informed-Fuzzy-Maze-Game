@@ -225,7 +225,7 @@ public class Runner extends JFrame implements KeyListener{
 	//TODO: Slow down running
     public void keyPressed(KeyEvent e) {
     	//player up
-    	if (e.getKeyCode() == KeyEvent.VK_UP && currentRow > 0) {
+    	if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W && currentRow > 0) {
         	if (isValidMove(currentRow - 1, currentCol)){
         		if(MazeView.hasSword){
     				if(swordMoveCount == 7){
@@ -253,7 +253,7 @@ public class Runner extends JFrame implements KeyListener{
         	}
         }
     	//player down
-    	else if (e.getKeyCode() == KeyEvent.VK_DOWN && currentRow < MAZE_DIMENSION - 1) {
+    	else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S && currentRow < MAZE_DIMENSION - 1) {
         	if (isValidMove(currentRow + 1, currentCol)){
         		if(MazeView.hasSword){
         			if(swordMoveCount == 7){
@@ -281,7 +281,7 @@ public class Runner extends JFrame implements KeyListener{
         	}
         }
     	//player right
-    	else if (e.getKeyCode() == KeyEvent.VK_RIGHT && currentCol < MAZE_DIMENSION - 1) {
+    	else if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D && currentCol < MAZE_DIMENSION - 1) {
         	if (isValidMove(currentRow, currentCol + 1)){
         		if(MazeView.hasSword){
         			if(swordMoveCount == 9){
@@ -308,7 +308,7 @@ public class Runner extends JFrame implements KeyListener{
         	}
         }
     	//player left
-    	else if (e.getKeyCode() == KeyEvent.VK_LEFT && currentCol > 0) {
+    	else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A && currentCol > 0) {
         	if (isValidMove(currentRow, currentCol - 1)){
         		if(MazeView.hasSword){
         			if(swordMoveCount == 11){

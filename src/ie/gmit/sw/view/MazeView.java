@@ -87,7 +87,7 @@ public class MazeView extends JPanel implements ActionListener{
 	public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
-                      
+                              
         cellspan = zoomOut ? maze.length : 5; 
         final int size = DEFAULT_VIEW_SIZE/cellspan;
         
@@ -96,34 +96,32 @@ public class MazeView extends JPanel implements ActionListener{
         		int x1 = col * size;
         		int y1 = row * size;
         		        		 
-        		char ch;
+        		char ch = maze[row][col].getType();
         		
-        		if (zoomOut){
-        			ch = maze[row][col].getType();
-        			
-        			if(ch == 'E'){
-        				g2.setColor(Color.RED);
-        				g2.fillRect(x1, y1, size, size);
-        				continue;
-        			}
-        			
-        			if(ch == '.'){
-        				g2.setColor(Color.CYAN);
-        				g2.fillRect(x1, y1, size, size);
-        				continue;
-        			}
-        			
-        			if(ch == 'W' || ch == 'S' || ch == 'T'){
-        				g2.setColor(Color.BLUE);
-        				g2.fillRect(x1, y1, size, size);
-        				continue;
-        			}
-        			       			
-        			if (row == currentRow && col == currentCol){
-        				g2.setColor(Color.YELLOW);
-        				g2.fillRect(x1, y1, size, size);
-        				continue;
-        			}
+        		if (zoomOut){        			
+	    			if(ch == 'E'){
+	    				g2.setColor(Color.RED);
+	    				g2.fillRect(x1, y1, size, size);
+	    				continue;
+	    			}
+	    			
+	    			if(ch == '.'){
+	    				g2.setColor(Color.CYAN);
+	    				g2.fillRect(x1, y1, size, size);
+	    				continue;
+	    			}
+	    			
+	    			if(ch == 'W' || ch == 'S' || ch == 'T'){
+	    				g2.setColor(Color.BLUE);
+	    				g2.fillRect(x1, y1, size, size);
+	    				continue;
+	    			}
+	    			       			
+	    			if (row == currentRow && col == currentCol){
+	    				g2.setColor(Color.YELLOW);
+	    				g2.fillRect(x1, y1, size, size);
+	    				continue;
+	    			}
         		}else{
         			ch = maze[currentRow - cellpadding + row][currentCol - cellpadding + col].getType();
         		}

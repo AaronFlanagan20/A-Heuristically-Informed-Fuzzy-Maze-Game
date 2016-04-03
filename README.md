@@ -10,6 +10,14 @@ This project was developed for my 4th year of Software Development module Artifi
 # Gameplay
 Your goal is to find the exit and avoid enemies. A number of weapons are available to pick up tp fight of enemies and it includes bombs to clear out some walls. The bombs use a depth limited depth-first search to destroy n rows and columns to the depth specified.
 
+# Commands
+* Forward: Up arrow key or W key
+* Backwards: Down arrow key or S key
+* Right: Right arrow key or D key
+* Left: Left arrow key or A key
+
+To pick up a weapon or use a bomb walk into the wall were the object is. Same rule applies once the exit is found.
+
 # Features
 * Player: You move around as a player. The player has various images for all directions, and images for when a weapon is being held.
 * Enemies: Enemies all have thier own thread to control their movement. They make use of two brute force search algorithms (Depth-first search, Breadth-first search) to move independently. Enemies are the spiders and they have two images which simulate the spider bouncing up and down.
