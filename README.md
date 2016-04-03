@@ -1,4 +1,15 @@
 # A-Heuristically-Informed-Fuzzy-Maze-Game
 
+Developer: Aaron Flanagan - G00330035
+Github: https://github.com/AaronFlanagan20/A-Heuristically-Informed-Fuzzy-Maze-Game
+
 # Background
-This project was developed for my 4th year of Software Development module Artificial Intelligence. It combines a maze generation algorithm, with fuzzy logic and some uniformed and informed search algoritms. The maze generation algorithm used is called Prim's. Examples found [here](https://en.wikipedia.org/wiki/Maze_generation_algorithm#Randomized_Prim.27s_algorithm) and [here](http://jonathanzong.com/blog/2012/11/06/maze-generation-with-prims-algorithm). The JFuzzyLogic API used is found [here](http://jfuzzylogic.sourceforge.net/html/manual.html#fcl) this was used for it's fuzzy constraint langauge. The project brief has been added to this repository also under [aiAssignment2016.pdf](aiAssignment2016.pdf).
+This project was developed for my 4th year of Software Development module Artificial Intelligence. It is based on the ZX81 Mazogs game developed in 1981 found [here](http://www.zx-gaming.co.uk/games/mazogs/default.htm.). It combines a maze generation algorithm, with fuzzy logic and some uniformed and informed search algoritms. The maze generation algorithm used is called Prim's. Examples found [here](https://en.wikipedia.org/wiki/Maze_generation_algorithm#Randomized_Prim.27s_algorithm) and [here](http://jonathanzong.com/blog/2012/11/06/maze-generation-with-prims-algorithm). The JFuzzyLogic API used is found [here](http://jfuzzylogic.sourceforge.net/html/manual.html#fcl) this was used for it's fuzzy constraint language. The project brief has been added to this repository also under [aiAssignment2016.pdf](aiAssignment2016.pdf).
+
+# Gameplay
+Your goal is to find the exit and avoid enemies. A number of weapons are available to pick up tp fight of enemies and it includes bombs to clear out some walls. The bombs use a depth limited depth-first search to destroy n rows and columns to the depth specified.
+
+# Features
+* Player: You move around as a player. The player has various images for all directions, and images for when a weapon is being held.
+* Enemies: Enemies all have thier own thread to control their movement. They make use of two brute force search algorithms (Depth-first search, Breadth-first search) to move independently. Enemies are the spiders and they have two images which simulate the spider bouncing up and down.
+* Weapons: 3 weapons are available, a toothpick, sword and spider spray. Each have a determined power for the fuzzy logic Fighting class, a toothpick is power ranges between 1-3, sword is 4-7 and spiderspray 7-10. The more powerful the weapon(closer to 10) the damage is dealt to enemies.
