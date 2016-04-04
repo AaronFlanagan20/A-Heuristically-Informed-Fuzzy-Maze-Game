@@ -91,7 +91,6 @@ public class Runner extends JFrame implements KeyListener{
     	if(model[currentRow][currentCol].getType() != 'X' && model[currentRow][currentCol].getType() == ' '){
     		model[currentRow][currentCol].setType(NodeType.PLAYER);
     	}else{
-    		System.out.println("Recalling");
     		placePlayer();
     	}
     	updateView();
@@ -229,129 +228,138 @@ public class Runner extends JFrame implements KeyListener{
 		view.setCurrentCol(currentCol);
 	}
 	
-	int moveCount = 0;
-	int sideCountRight = 3;
-	int sideCountLeft = 5;
-	int swordMoveCount = 7;
+	private int moveCount = 0;
+	private int sideCountRight = 3;
+	private int sideCountLeft = 5;
+	private int swordMoveCount = 7;
+	
+	private long lastPress;
 
 	//TODO: Slow down running
     public void keyPressed(KeyEvent e) {
-    	//player up
-    	if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W && currentRow > 0) {
-        	if (isValidMove(currentRow - 1, currentCol)){
-        		if(MazeView.hasSword){
-    				if(swordMoveCount == 7){
-        				MazeView.direction = swordMoveCount;
-            			currentRow--;
-        				swordMoveCount++;
-        			}else{
-        				MazeView.direction = 8;
-            			currentRow--;
-        				swordMoveCount--;
-        			}
-        		}else{
-        			if(moveCount <= 2){
-        				MazeView.direction = moveCount;
-            			currentRow--;
-        				moveCount++;
-        			}else{
-        				moveCount = 0;
-        				MazeView.direction = moveCount;
-            			currentRow--;
-        				moveCount++;
-        			}
-        		}
-        		updateView();
-        	}
-        }
-    	//player down
-    	else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S && currentRow < MAZE_DIMENSION - 1) {
-        	if (isValidMove(currentRow + 1, currentCol)){
-        		if(MazeView.hasSword){
-        			if(swordMoveCount == 7){
-        				MazeView.direction = swordMoveCount;
-        				currentRow++;
-        				swordMoveCount++;
-        			}else{
-        				MazeView.direction = 8;
-        				currentRow++;
-        				swordMoveCount--;
-        			}
-        		}else {
-	    			if(moveCount <= 2){
-	    				MazeView.direction = moveCount;
-	    				currentRow++;
-	    				moveCount++;
-	    			}else{
-	    				moveCount = 0;
-	    				MazeView.direction = moveCount;
-	    				currentRow++;
-	    				moveCount++;
-	    			}
-        		}
-        		updateView();
-        	}
-        }
-    	//player right
-    	else if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D && currentCol < MAZE_DIMENSION - 1) {
-        	if (isValidMove(currentRow, currentCol + 1)){
-        		if(MazeView.hasSword){
-        			if(swordMoveCount == 9){
-        				MazeView.direction = swordMoveCount;
-        				currentCol++;
-        				swordMoveCount++;
-        			}else{
-        				MazeView.direction = 10;
-        				currentCol++;
-        				swordMoveCount--;
-        			}
-        		}else{
-	        		if(sideCountRight == 3){
-	    				MazeView.direction = sideCountRight;
-	    				currentCol++;
-	    				sideCountRight++;
-	    			}else if(sideCountRight == 4){
-	    				MazeView.direction = sideCountRight;
-	    				currentCol++;
-	    				sideCountRight--;
-	    			}
-        		}
-        		updateView();
-        	}
-        }
-    	//player left
-    	else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A && currentCol > 0) {
-        	if (isValidMove(currentRow, currentCol - 1)){
-        		if(MazeView.hasSword){
-        			if(swordMoveCount == 11){
-        				MazeView.direction = swordMoveCount;
-        				currentCol--;
-        				swordMoveCount++;
-        			}else{
-        				MazeView.direction = 12;
-        				currentCol--;
-        				swordMoveCount--;
-        			}
-        		}else{
-		    		if(sideCountLeft == 5){
-						MazeView.direction = 5;
-						currentCol--;
-						sideCountLeft = 6;
-					}else if(sideCountLeft == 6){
-						MazeView.direction = 6;
-						currentCol--;
-						sideCountLeft = 5;
-					}
-        		}
-        		updateView();
-        	}
-        }
-    	//toggle view
-    	else if (e.getKeyCode() == KeyEvent.VK_Z){
-        	view.toggleZoom();
-        }else{
-        	return;
-        }
+    	try{
+    		if(System.currentTimeMillis() - lastPress > 250) {
+    			//player up
+				if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W && currentRow > 0) {
+			    	if (isValidMove(currentRow - 1, currentCol)){
+			    		if(MazeView.hasSword){
+							if(swordMoveCount == 7){
+			    				MazeView.direction = swordMoveCount;
+			        			currentRow--;
+			    				swordMoveCount++;
+			    			}else{
+			    				MazeView.direction = 8;
+			        			currentRow--;
+			    				swordMoveCount--;
+			    			}
+			    		}else{
+			    			if(moveCount <= 2){
+			    				MazeView.direction = moveCount;
+			        			currentRow--;
+			    				moveCount++;
+			    			}else{
+			    				moveCount = 0;
+			    				MazeView.direction = moveCount;
+			        			currentRow--;
+			    				moveCount++;
+			    			}
+			    		}
+			    		updateView();
+			    	}
+			    }
+				//player down
+				else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S && currentRow < MAZE_DIMENSION - 1) {
+			    	if (isValidMove(currentRow + 1, currentCol)){
+			    		if(MazeView.hasSword){
+			    			if(swordMoveCount == 7){
+			    				MazeView.direction = swordMoveCount;
+			    				currentRow++;
+			    				swordMoveCount++;
+			    			}else{
+			    				MazeView.direction = 8;
+			    				currentRow++;
+			    				swordMoveCount--;
+			    			}
+			    		}else {
+			    			if(moveCount <= 2){
+			    				MazeView.direction = moveCount;
+			    				currentRow++;
+			    				moveCount++;
+			    			}else{
+			    				moveCount = 0;
+			    				MazeView.direction = moveCount;
+			    				currentRow++;
+			    				moveCount++;
+			    			}
+			    		}
+			    		updateView();
+			    	}
+			    }
+				//player right
+				else if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D && currentCol < MAZE_DIMENSION - 1) {
+			    	if (isValidMove(currentRow, currentCol + 1)){
+			    		if(MazeView.hasSword){
+			    			if(swordMoveCount == 9){
+			    				MazeView.direction = swordMoveCount;
+			    				currentCol++;
+			    				swordMoveCount++;
+			    			}else{
+			    				MazeView.direction = 10;
+			    				currentCol++;
+			    				swordMoveCount--;
+			    			}
+			    		}else{
+			        		if(sideCountRight == 3){
+			    				MazeView.direction = sideCountRight;
+			    				currentCol++;
+			    				sideCountRight++;
+			    			}else if(sideCountRight == 4){
+			    				MazeView.direction = sideCountRight;
+			    				currentCol++;
+			    				sideCountRight--;
+			    			}
+			    		}
+			    		updateView();
+			    	}
+			    }
+				//player left
+				else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A && currentCol > 0) {
+			    	if (isValidMove(currentRow, currentCol - 1)){
+			    		if(MazeView.hasSword){
+			    			if(swordMoveCount == 11){
+			    				MazeView.direction = swordMoveCount;
+			    				currentCol--;
+			    				swordMoveCount++;
+			    			}else{
+			    				MazeView.direction = 12;
+			    				currentCol--;
+			    				swordMoveCount--;
+			    			}
+			    		}else{
+				    		if(sideCountLeft == 5){
+								MazeView.direction = 5;
+								currentCol--;
+								sideCountLeft = 6;
+							}else if(sideCountLeft == 6){
+								MazeView.direction = 6;
+								currentCol--;
+								sideCountLeft = 5;
+							}
+			    		}
+			    		updateView();
+			    	}
+			    }
+				//toggle view
+				else if (e.getKeyCode() == KeyEvent.VK_Z){
+			    	view.toggleZoom();
+			    }else{
+			    	return;
+			    }
+				lastPress = System.currentTimeMillis();
+    		}
+    	}catch(Exception ex){
+    		//catch ArrayIndexOutOfBoundEx when try to walk through of of the edge walls
+    	}
           
     }
     
@@ -368,8 +376,8 @@ public class Runner extends JFrame implements KeyListener{
 	 * Performs collision detection and fires method calls based on a feature that is walked in to
 	 * 
 	 */
-	private boolean isValidMove(int r, int c){
-		if (r <= model.length - 1 && c <= model[r].length - 1 && model[r][c].getType() == ' '){
+	private boolean isValidMove(int r, int c) throws Exception{
+		if (r <= model.length - 1 && c <= model[r].length - 1 && r >= 0 & c >= 0 && model[r][c].getType() == ' '){
 			model[currentRow][currentCol].setType(NodeType.NONE);
 			model[r][c].setType(NodeType.PLAYER);
 			return true;
@@ -413,7 +421,7 @@ public class Runner extends JFrame implements KeyListener{
 			
 			if(model[r][c].getType() == 'E'){ 
 				
-				double result = Fighting.fight(weaponStrength, enemiesHealth.get(model[r][c]));//TODO: NullPointer thrown on node sometimes 
+				double result = Fighting.fight(weaponStrength, enemiesHealth.get(model[r][c])); 
 				int damage = (int) Math.round(result);
 				int health = 10;
 				
