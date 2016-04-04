@@ -6,15 +6,19 @@ import java.awt.FlowLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
 import javax.swing.JFrame;
+import javax.swing.Timer;
 
 import ie.gmit.sw.fuzzylogic.Fighting;
-import ie.gmit.sw.maze.*;
+import ie.gmit.sw.maze.Maze;
+import ie.gmit.sw.maze.Node;
 import ie.gmit.sw.maze.Node.NodeType;
-import ie.gmit.sw.view.*;
+import ie.gmit.sw.view.GameOver;
+import ie.gmit.sw.view.MazeView;
 
 /**
  * Runner.java is the main class. It creates a mazeView object, sets it's dimensions and adds it to the frame.
@@ -42,8 +46,8 @@ public class Runner extends JFrame implements KeyListener{
 	private Thread[] enemies;
 	private Map<Node, Integer> enemiesHealth;
 	private int weaponStrength = 0;
-	private int playerHealth = 100;
-
+	public static int playerHealth = 100;
+	
 	/**
 	 * Add in MazeView, create a Thread array for enemies to move and a list to store the enemy and their health
 	 * 
@@ -80,6 +84,8 @@ public class Runner extends JFrame implements KeyListener{
         for(Thread t: enemies){
         	t.start();
         }
+        
+       
 	}
 	
 	/**
@@ -106,19 +112,25 @@ public class Runner extends JFrame implements KeyListener{
 			int row = (int) (MAZE_DIMENSION * Math.random());
 			int col = (int) (MAZE_DIMENSION * Math.random());
 			model[row][col] = new Node(row,col);
-			model[row][col].setType(NodeType.ENEMY);
-			Thread t = new Thread(new Runnable() {
-				public void run() {
-					while(true){
-						int num = (int)(Math.random() * 10);
-						if(num >= 5)
-							bruteForce(model, model[row][col], view, true);
-						else
-							bruteForce(model, model[row][col], view, false);
+			if(model[row][col].getType() != 'X' && model[row][col].getType() == ' '){
+				model[row][col].setType(NodeType.ENEMY);
+				Thread t = new Thread(new Runnable() {
+					public void run() {
+						while(true){
+							int num = (int)(Math.random() * 10);
+							if(num >= 5)
+								bruteForce(model, model[row][col], view, true);
+							else
+								bruteForce(model, model[row][col], view, false);
+						}
 					}
-				}
-			});
-			enemies[i] = t;
+				});
+				enemies[i] = t;
+			}else{
+				System.out.println("going back");
+				i--;
+			}
+				
 		}
 	}
 	
@@ -170,36 +182,40 @@ public class Runner extends JFrame implements KeyListener{
 				 		}
 					}
 				}catch(ArrayIndexOutOfBoundsException e){
-					
+					//When trying to walk through the mazes surrounding walls
 				}
 				
 				try {
-					Thread.sleep(2000);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
 		}
 		
-//		while(it.hasNext()){
-//			Node next = queue.poll();
-//			next.setType(NodeType.ENEMY);
-//			
-//			if(next != null){
-//				next.setVisited(true);
-//				
-//				Node[] children = next.children(maze);
-//			 	for (int i = 0; i < children.length; i++) {
-//			 		if (!children[i].isVisited()){
-//			 			if(lifo){
-//			 				queue.addFirst(children[i]);
-//			 			}else{
-//			 				queue.addLast(children[i]);
-//			 			}
-//			 		}
-//				}
-//			}
-//		}
+		Iterator<Node> it = queue.descendingIterator();
+		
+		while(it.hasNext()){
+			System.out.println("in");
+			Node next = queue.poll();
+			next.setType(NodeType.ENEMY);
+			
+			if(next != null){
+				next.setVisited(true);
+				
+				Node[] children = next.children(maze);
+			 	for (int i = 0; i < children.length; i++) {
+			 		if (!children[i].isVisited()){
+			 			if(lifo){
+			 				queue.addFirst(children[i]);
+			 			}else{
+			 				queue.addLast(children[i]);
+			 			}
+			 		}
+				}
+			}
+		}
+
 //		while(true){		
 //			
 //			try { //Simulate processing each expanded node
@@ -235,7 +251,6 @@ public class Runner extends JFrame implements KeyListener{
 	
 	private long lastPress;
 
-	//TODO: Slow down running
     public void keyPressed(KeyEvent e) {
     	try{
     		if(System.currentTimeMillis() - lastPress > 250) {

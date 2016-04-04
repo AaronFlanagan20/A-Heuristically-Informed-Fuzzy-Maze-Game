@@ -95,7 +95,7 @@ public class MazeView extends JPanel implements ActionListener{
         	for (int col = 0; col < cellspan; col++){  
         		int x1 = col * size;
         		int y1 = row * size;
-        		        		 
+        				        		 
         		char ch = maze[row][col].getType();
         		
         		if (zoomOut){        			
@@ -124,6 +124,22 @@ public class MazeView extends JPanel implements ActionListener{
 	    			}
         		}else{
         			ch = maze[currentRow - cellpadding + row][currentCol - cellpadding + col].getType();
+        		}
+        		
+        		if(Runner.playerHealth == 100){
+        			imageIndex = 23;
+        		}else if(Runner.playerHealth == 75){
+        			imageIndex = 24;
+        		}else if(Runner.playerHealth == 50){
+        			imageIndex = 25;
+        		}else if(Runner.playerHealth == 25){
+        			imageIndex = 26;
+        		}
+        		
+        		if(!zoomOut){
+        			g2.setColor(Color.RED);
+        			g2.drawString("Health", 50, 20);
+        			g2.drawImage(images[imageIndex], 20, 20, null);
         		}
         		
         		if (ch == 'X'){        			
@@ -196,7 +212,7 @@ public class MazeView extends JPanel implements ActionListener{
 	 * @throws Exception
 	 */
 	private void init() throws Exception{
-		images = new BufferedImage[23];
+		images = new BufferedImage[28];
 		images[0] = ImageIO.read(new java.io.File("resources/wall.png"));
 		images[1] = ImageIO.read(new java.io.File("resources/sword.png"));		
 		images[2] = ImageIO.read(new java.io.File("resources/prisoner.png"));
@@ -219,5 +235,9 @@ public class MazeView extends JPanel implements ActionListener{
 		images[20] = ImageIO.read(new java.io.File("resources/stairs_exit.png"));
 		images[21] = ImageIO.read(new java.io.File("resources/toothpick.png"));
 		images[22] = ImageIO.read(new java.io.File("resources/spiderspray.png"));
+		images[23] = ImageIO.read(new java.io.File("resources/health-bar100.png"));
+		images[24] = ImageIO.read(new java.io.File("resources/health-bar75.png"));
+		images[25] = ImageIO.read(new java.io.File("resources/health-bar50.png"));
+		images[26] = ImageIO.read(new java.io.File("resources/health-bar25.png"));
 	}
 }
