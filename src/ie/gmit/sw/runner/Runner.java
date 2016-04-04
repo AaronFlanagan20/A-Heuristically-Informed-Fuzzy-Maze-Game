@@ -88,7 +88,12 @@ public class Runner extends JFrame implements KeyListener{
 	private void placePlayer(){   	
     	currentRow = (int) (MAZE_DIMENSION * Math.random());
     	currentCol = (int) (MAZE_DIMENSION * Math.random());
-    	model[currentRow][currentCol].setType(NodeType.PLAYER);
+    	if(model[currentRow][currentCol].getType() != 'X' && model[currentRow][currentCol].getType() == ' '){
+    		model[currentRow][currentCol].setType(NodeType.PLAYER);
+    	}else{
+    		System.out.println("Recalling");
+    		placePlayer();
+    	}
     	updateView();
 	}
 	
@@ -172,7 +177,6 @@ public class Runner extends JFrame implements KeyListener{
 				try {
 					Thread.sleep(2000);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

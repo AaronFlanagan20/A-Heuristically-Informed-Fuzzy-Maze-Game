@@ -54,7 +54,7 @@ public class Maze {
 	 * @param replace
 	 */
 	private void addFeature(char feature, char replace){
-		for(int r =0; r < 60; r++){
+		for(int r =0; r < 30; r++){
 			
 			int row = (int) (Math.random() * maze.length);
 			int col = (int) (Math.random() * maze.length);
@@ -119,8 +119,6 @@ public class Maze {
     				maze[currentPoint.r][currentPoint.c].setType(NodeType.NONE);
     				maze[oppositePoint.r][oppositePoint.c].setType(NodeType.NONE);
     				
-    				
-
     				// store last node in order to mark it later
     				last = oppositePoint;
 

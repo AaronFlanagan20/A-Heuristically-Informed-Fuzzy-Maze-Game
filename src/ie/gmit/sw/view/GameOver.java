@@ -2,13 +2,12 @@ package ie.gmit.sw.view;
 
 import java.awt.BorderLayout;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import ie.gmit.sw.runner.Runner;
@@ -27,6 +26,11 @@ public class GameOver extends JFrame{
 	public GameOver() {
 		
 		JPanel panel = new JPanel();
+		JPanel labelPanel = new JPanel();
+		
+		JLabel gameOver = new JLabel("Game over");
+		gameOver.setFont(new Font("ITALIC" ,0, 40));
+		labelPanel.add(gameOver, BorderLayout.NORTH);
 
 		JButton play = new JButton("Play");
 		play.addActionListener(new ActionListener() {
@@ -58,22 +62,14 @@ public class GameOver extends JFrame{
 		panel.add(exit, BorderLayout.EAST);
 		
 		getContentPane().add(panel, BorderLayout.SOUTH);
+		getContentPane().add(labelPanel, BorderLayout.NORTH);
 
-		setSize(700, 600);
+		setSize(400, 300);
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 	}
-	
-	@Override
-	public void paint(Graphics g) {
-		super.paint(g);
 		
-		Graphics2D g2 = (Graphics2D)g;
-		g2.setFont(new Font("TimesRoman", Font.PLAIN, 60)); 
-		g2.drawString("Game Over", 200, 200);
-	}
-	
 	public static void main(String[] args) {
 		new GameOver();
 	}
