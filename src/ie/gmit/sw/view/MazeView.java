@@ -1,6 +1,7 @@
 package ie.gmit.sw.view;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -87,7 +88,7 @@ public class MazeView extends JPanel implements ActionListener{
 	public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
-                              
+                                      
         cellspan = zoomOut ? maze.length : 5; 
         final int size = DEFAULT_VIEW_SIZE/cellspan;
         
@@ -126,20 +127,28 @@ public class MazeView extends JPanel implements ActionListener{
         			ch = maze[currentRow - cellpadding + row][currentCol - cellpadding + col].getType();
         		}
         		
+        		int image = 23;
         		if(Runner.playerHealth == 100){
-        			imageIndex = 23;
+        			image = 23;
         		}else if(Runner.playerHealth == 75){
-        			imageIndex = 24;
+        			image = 24;
         		}else if(Runner.playerHealth == 50){
-        			imageIndex = 25;
+        			image = 25;
         		}else if(Runner.playerHealth == 25){
-        			imageIndex = 26;
+        			image = 26;
         		}
         		
         		if(!zoomOut){
+        			g2.setFont(new Font("ITALIC", 1, 20));
         			g2.setColor(Color.RED);
-        			g2.drawString("Health", 50, 20);
-        			g2.drawImage(images[imageIndex], 20, 20, null);
+        			
+        			g2.drawString("Health", 90, 20);
+        			g2.drawImage(images[image], 22, 30, null);
+        			
+        			//STEPS ON SCREEN
+            		int stepsLeft = 1999 - Runner.stepsLeft;
+            		g2.drawString("Steps Left", 250, 20);
+            		g2.drawString("" + stepsLeft, 270, 45);
         		}
         		
         		if (ch == 'X'){        			
@@ -163,7 +172,7 @@ public class MazeView extends JPanel implements ActionListener{
         		}else{
         			imageIndex = -1;
         		}
-        		
+        		   		
         		if (imageIndex >= 0){
         			g2.drawImage(images[imageIndex], x1, y1, null);
         		}else{

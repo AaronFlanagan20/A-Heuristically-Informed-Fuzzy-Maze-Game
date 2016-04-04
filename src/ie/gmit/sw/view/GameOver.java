@@ -23,13 +23,13 @@ public class GameOver extends JFrame{
 	
 	private static final long serialVersionUID = 1L;
 
-	public GameOver() {
+	public GameOver(String reason) {
 		
 		JPanel panel = new JPanel();
 		JPanel labelPanel = new JPanel();
 		
-		JLabel gameOver = new JLabel("Game over");
-		gameOver.setFont(new Font("ITALIC" ,0, 40));
+		JLabel gameOver = new JLabel("<html> Game over <br/> Reason: " + reason + "</html>");
+		gameOver.setFont(new Font("ITALIC" ,0, 30));
 		labelPanel.add(gameOver, BorderLayout.NORTH);
 
 		JButton play = new JButton("Play");
@@ -40,6 +40,7 @@ public class GameOver extends JFrame{
 				if(e.getSource() == play){
 					dispose();
 					try {
+						Runner.stepsLeft = 0;
 						new Runner();
 					} catch (Exception e1) {
 						e1.printStackTrace();
@@ -69,9 +70,4 @@ public class GameOver extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 	}
-		
-	public static void main(String[] args) {
-		new GameOver();
-	}
-
 }

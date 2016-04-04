@@ -6,12 +6,10 @@ import java.awt.FlowLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
 import javax.swing.JFrame;
-import javax.swing.Timer;
 
 import ie.gmit.sw.fuzzylogic.Fighting;
 import ie.gmit.sw.maze.Maze;
@@ -47,6 +45,7 @@ public class Runner extends JFrame implements KeyListener{
 	private Map<Node, Integer> enemiesHealth;
 	private int weaponStrength = 0;
 	public static int playerHealth = 100;
+	public static int stepsLeft = 0;
 	
 	/**
 	 * Add in MazeView, create a Thread array for enemies to move and a list to store the enemy and their health
@@ -84,8 +83,6 @@ public class Runner extends JFrame implements KeyListener{
         for(Thread t: enemies){
         	t.start();
         }
-        
-       
 	}
 	
 	/**
@@ -193,28 +190,27 @@ public class Runner extends JFrame implements KeyListener{
 			}
 		}
 		
-		Iterator<Node> it = queue.descendingIterator();
-		
-		while(it.hasNext()){
-			System.out.println("in");
-			Node next = queue.poll();
-			next.setType(NodeType.ENEMY);
-			
-			if(next != null){
-				next.setVisited(true);
-				
-				Node[] children = next.children(maze);
-			 	for (int i = 0; i < children.length; i++) {
-			 		if (!children[i].isVisited()){
-			 			if(lifo){
-			 				queue.addFirst(children[i]);
-			 			}else{
-			 				queue.addLast(children[i]);
-			 			}
-			 		}
-				}
-			}
-		}
+//		Iterator<Node> it = queue.descendingIterator();
+//		
+//		while(it.hasNext()){
+//			Node next = queue.poll();
+//			next.setType(NodeType.ENEMY);
+//			
+//			if(next != null){
+//				next.setVisited(true);
+//				
+//				Node[] children = next.children(maze);
+//			 	for (int i = 0; i < children.length; i++) {
+//			 		if (!children[i].isVisited()){
+//			 			if(lifo){
+//			 				queue.addFirst(children[i]);
+//			 			}else{
+//			 				queue.addLast(children[i]);
+//			 			}
+//			 		}
+//				}
+//			}
+//		}
 
 //		while(true){		
 //			
@@ -256,113 +252,149 @@ public class Runner extends JFrame implements KeyListener{
     		if(System.currentTimeMillis() - lastPress > 250) {
     			//player up
 				if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W && currentRow > 0) {
-			    	if (isValidMove(currentRow - 1, currentCol)){
-			    		if(MazeView.hasSword){
-							if(swordMoveCount == 7){
-			    				MazeView.direction = swordMoveCount;
-			        			currentRow--;
-			    				swordMoveCount++;
-			    			}else{
-			    				MazeView.direction = 8;
-			        			currentRow--;
-			    				swordMoveCount--;
-			    			}
-			    		}else{
-			    			if(moveCount <= 2){
-			    				MazeView.direction = moveCount;
-			        			currentRow--;
-			    				moveCount++;
-			    			}else{
-			    				moveCount = 0;
-			    				MazeView.direction = moveCount;
-			        			currentRow--;
-			    				moveCount++;
-			    			}
-			    		}
-			    		updateView();
-			    	}
+					if(stepsLeft < 2000){
+				    	if (isValidMove(currentRow - 1, currentCol)){
+				    		if(MazeView.hasSword){
+								if(swordMoveCount == 7){
+				    				MazeView.direction = swordMoveCount;
+				        			currentRow--;
+				    				swordMoveCount++;
+				    				stepsLeft++;
+				    			}else{
+				    				MazeView.direction = 8;
+				        			currentRow--;
+				    				swordMoveCount--;
+				    				stepsLeft++;
+				    			}
+				    		}else{
+				    			if(moveCount <= 2){
+				    				MazeView.direction = moveCount;
+				        			currentRow--;
+				    				moveCount++;
+				    				stepsLeft++;
+				    			}else{
+				    				moveCount = 0;
+				    				MazeView.direction = moveCount;
+				        			currentRow--;
+				    				moveCount++;
+				    				stepsLeft++;
+				    			}
+				    		}
+				    		updateView();
+				    	}
+					}else{
+						new GameOver("steps");
+						this.dispose();
+					}
 			    }
 				//player down
 				else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S && currentRow < MAZE_DIMENSION - 1) {
-			    	if (isValidMove(currentRow + 1, currentCol)){
-			    		if(MazeView.hasSword){
-			    			if(swordMoveCount == 7){
-			    				MazeView.direction = swordMoveCount;
-			    				currentRow++;
-			    				swordMoveCount++;
-			    			}else{
-			    				MazeView.direction = 8;
-			    				currentRow++;
-			    				swordMoveCount--;
-			    			}
-			    		}else {
-			    			if(moveCount <= 2){
-			    				MazeView.direction = moveCount;
-			    				currentRow++;
-			    				moveCount++;
-			    			}else{
-			    				moveCount = 0;
-			    				MazeView.direction = moveCount;
-			    				currentRow++;
-			    				moveCount++;
-			    			}
-			    		}
-			    		updateView();
+			    	if(stepsLeft < 2000){
+						if (isValidMove(currentRow + 1, currentCol)){
+				    		if(MazeView.hasSword){
+				    			if(swordMoveCount == 7){
+				    				MazeView.direction = swordMoveCount;
+				    				currentRow++;
+				    				swordMoveCount++;
+				    				stepsLeft++;
+				    			}else{
+				    				MazeView.direction = 8;
+				    				currentRow++;
+				    				swordMoveCount--;
+				    				stepsLeft++;
+				    			}
+				    		}else {
+				    			if(moveCount <= 2){
+				    				MazeView.direction = moveCount;
+				    				currentRow++;
+				    				moveCount++;
+				    				stepsLeft++;
+				    			}else{
+				    				moveCount = 0;
+				    				MazeView.direction = moveCount;
+				    				currentRow++;
+				    				moveCount++;
+				    				stepsLeft++;
+				    			}
+				    		}
+				    		updateView();
+				    	}
+			    	}else{
+			    		new GameOver("steps");
+						this.dispose();
 			    	}
 			    }
 				//player right
 				else if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D && currentCol < MAZE_DIMENSION - 1) {
-			    	if (isValidMove(currentRow, currentCol + 1)){
-			    		if(MazeView.hasSword){
-			    			if(swordMoveCount == 9){
-			    				MazeView.direction = swordMoveCount;
-			    				currentCol++;
-			    				swordMoveCount++;
-			    			}else{
-			    				MazeView.direction = 10;
-			    				currentCol++;
-			    				swordMoveCount--;
-			    			}
-			    		}else{
-			        		if(sideCountRight == 3){
-			    				MazeView.direction = sideCountRight;
-			    				currentCol++;
-			    				sideCountRight++;
-			    			}else if(sideCountRight == 4){
-			    				MazeView.direction = sideCountRight;
-			    				currentCol++;
-			    				sideCountRight--;
-			    			}
-			    		}
-			    		updateView();
-			    	}
+					if(stepsLeft < 2000){
+						if (isValidMove(currentRow, currentCol + 1)){
+				    		if(MazeView.hasSword){
+				    			if(swordMoveCount == 9){
+				    				MazeView.direction = swordMoveCount;
+				    				currentCol++;
+				    				swordMoveCount++;
+				    				stepsLeft++;
+				    			}else{
+				    				MazeView.direction = 10;
+				    				currentCol++;
+				    				swordMoveCount--;
+				    				stepsLeft++;
+				    			}
+				    		}else{
+				        		if(sideCountRight == 3){
+				    				MazeView.direction = sideCountRight;
+				    				currentCol++;
+				    				sideCountRight++;
+				    				stepsLeft++;
+				    			}else if(sideCountRight == 4){
+				    				MazeView.direction = sideCountRight;
+				    				currentCol++;
+				    				sideCountRight--;
+				    				stepsLeft++;
+				    			}
+				    		}
+				    		updateView();
+				    	}
+					}else{
+						new GameOver("steps");
+						this.dispose();
+					}
 			    }
 				//player left
 				else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A && currentCol > 0) {
-			    	if (isValidMove(currentRow, currentCol - 1)){
-			    		if(MazeView.hasSword){
-			    			if(swordMoveCount == 11){
-			    				MazeView.direction = swordMoveCount;
-			    				currentCol--;
-			    				swordMoveCount++;
-			    			}else{
-			    				MazeView.direction = 12;
-			    				currentCol--;
-			    				swordMoveCount--;
-			    			}
-			    		}else{
-				    		if(sideCountLeft == 5){
-								MazeView.direction = 5;
-								currentCol--;
-								sideCountLeft = 6;
-							}else if(sideCountLeft == 6){
-								MazeView.direction = 6;
-								currentCol--;
-								sideCountLeft = 5;
-							}
-			    		}
-			    		updateView();
-			    	}
+					if(stepsLeft < 2000){
+						if (isValidMove(currentRow, currentCol - 1)){
+				    		if(MazeView.hasSword){
+				    			if(swordMoveCount == 11){
+				    				MazeView.direction = swordMoveCount;
+				    				currentCol--;
+				    				swordMoveCount++;
+				    				stepsLeft++;
+				    			}else{
+				    				MazeView.direction = 12;
+				    				currentCol--;
+				    				swordMoveCount--;
+				    				stepsLeft++;
+				    			}
+				    		}else{
+					    		if(sideCountLeft == 5){
+									MazeView.direction = 5;
+									currentCol--;
+									sideCountLeft = 6;
+									stepsLeft++;
+								}else if(sideCountLeft == 6){
+									MazeView.direction = 6;
+									currentCol--;
+									sideCountLeft = 5;
+									stepsLeft++;
+								}
+				    		}
+				    		updateView();
+				    	}
+					}else{
+						new GameOver("steps");
+						this.dispose();
+					}
 			    }
 				//toggle view
 				else if (e.getKeyCode() == KeyEvent.VK_Z){
@@ -393,9 +425,9 @@ public class Runner extends JFrame implements KeyListener{
 	 */
 	private boolean isValidMove(int r, int c) throws Exception{
 		if (r <= model.length - 1 && c <= model[r].length - 1 && r >= 0 & c >= 0 && model[r][c].getType() == ' '){
-			model[currentRow][currentCol].setType(NodeType.NONE);
-			model[r][c].setType(NodeType.PLAYER);
-			return true;
+				model[currentRow][currentCol].setType(NodeType.NONE);
+				model[r][c].setType(NodeType.PLAYER);
+				return true;
 		}else{
 			if(model[r][c].getType() == 'W' && !MazeView.hasSword){
 				model[r][c].setType(NodeType.WALL);
@@ -430,7 +462,7 @@ public class Runner extends JFrame implements KeyListener{
 			if(model[r][c].getType() == '.'){ 
 				model[r][c] = new Node(r,c);
 				model[r][c].setType(NodeType.NONE);
-				new GameOver();
+				new GameOver("You win");
 				this.dispose();
 			}
 			
@@ -458,7 +490,7 @@ public class Runner extends JFrame implements KeyListener{
 				}
 				
 				if(playerHealth <= 0){
-		        	new GameOver();
+		        	new GameOver("health");
 					this.dispose();
 					MazeView.direction = 2;
 		        }
