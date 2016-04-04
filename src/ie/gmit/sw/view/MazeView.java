@@ -88,7 +88,9 @@ public class MazeView extends JPanel implements ActionListener{
 	public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
-                                      
+        
+        g2.setFont(new Font("ITALIC", 1, 20));
+		                              
         cellspan = zoomOut ? maze.length : 5; 
         final int size = DEFAULT_VIEW_SIZE/cellspan;
         
@@ -139,9 +141,7 @@ public class MazeView extends JPanel implements ActionListener{
         		}
         		
         		if(!zoomOut){
-        			g2.setFont(new Font("ITALIC", 1, 20));
         			g2.setColor(Color.RED);
-        			
         			g2.drawString("Health", 90, 20);
         			g2.drawImage(images[image], 22, 30, null);
         			

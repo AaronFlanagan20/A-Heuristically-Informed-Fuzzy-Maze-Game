@@ -6,7 +6,6 @@ import java.awt.FlowLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 import javax.swing.JFrame;
@@ -140,8 +139,8 @@ public class Runner extends JFrame implements KeyListener{
 	 * @param lifo
 	 */
 	private void bruteForce(Node[][] maze, Node node, Component viewer, boolean lifo){
-		LinkedList<Node> queue = new LinkedList<Node>();
-		queue.add(node);
+		//LinkedList<Node> queue = new LinkedList<Node>();
+		//queue.add(node);
 				
 		int num = (int)(Math.random() * 10);
 		
@@ -158,38 +157,38 @@ public class Runner extends JFrame implements KeyListener{
 			case 10: enemiesHealth.put(node, 9); break;
 	}
 			
-		while (!queue.isEmpty()){
-			
-			Node next = queue.poll();
-			
-			if(next != null){
-				next.setVisited(true);
-				
-				try{
-					Node[] children = next.children(maze);
-				 	for (int i = 0; i < children.length; i++) {
-				 		if (!children[i].isVisited()){
-				 			//children[i-1].setType(NodeType.NONE);
-				 			children[i].setType(NodeType.ENEMY);
-				 			if(lifo){
-				 				queue.addFirst(children[i]);
-				 			}else{
-				 				queue.addLast(children[i]);
-				 			}
-				 		}
-					}
-				}catch(ArrayIndexOutOfBoundsException e){
-					//When trying to walk through the mazes surrounding walls
-				}
-				
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		
+//		while (!queue.isEmpty()){
+//			
+//			Node next = queue.poll();
+//			
+//			if(next != null){
+//				next.setVisited(true);
+//				
+//				try{
+//					Node[] children = next.children(maze);
+//				 	for (int i = 0; i < children.length; i++) {
+//				 		if (!children[i].isVisited()){
+//				 			//children[i-1].setType(NodeType.NONE);
+//				 			children[i].setType(NodeType.ENEMY);
+//				 			if(lifo){
+//				 				queue.addFirst(children[i]);
+//				 			}else{
+//				 				queue.addLast(children[i]);
+//				 			}
+//				 		}
+//					}
+//				}catch(ArrayIndexOutOfBoundsException e){
+//					//When trying to walk through the mazes surrounding walls
+//				}
+//				
+//				try {
+//					Thread.sleep(1000);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		}
+//		
 //		Iterator<Node> it = queue.descendingIterator();
 //		
 //		while(it.hasNext()){
@@ -212,24 +211,41 @@ public class Runner extends JFrame implements KeyListener{
 //			}
 //		}
 
-//		while(true){		
-//			
-//			try { //Simulate processing each expanded node
-//				Thread.sleep(1);
-//			} catch (InterruptedException e) {
-//				e.printStackTrace();
-//			}
-//			
-//			//Pick a random adjacent node
-//        	Node[] children = node.children(maze);
-//        	System.out.println(children.length);
-//        	if(children.length > 0){
-//        		//node.setType(NodeType.NONE);
-//        		node = children[(int)(children.length * Math.random())];
-//        		node.setType(NodeType.ENEMY);
-//        		view.repaint();
-//        	}
-//		}
+		while(true){
+			int r = node.getRow();
+			int c = node.getCol();
+			
+			 for(int x=-1;x<=1;x++){
+	        		try{
+	        			Thread.sleep(1000);
+	        			if(maze[r+x][c].getType() == ' '){
+	        				maze[r][c].setType(NodeType.NONE);
+	        				r+=x;
+	        			}else if(maze[r][c+x].getType() == ' '){
+	        				maze[r][c].setType(NodeType.NONE);
+	        				c+=x;
+	        			}else if(maze[r-x][c].getType() == ' '){
+	        				maze[r][c].setType(NodeType.NONE);
+	        				r-=x;
+	        			}else if(maze[r][c-x].getType() == ' '){
+	        				maze[r][c].setType(NodeType.NONE);
+	        				c-=x;
+	        			}
+	        		}catch(Exception e){ // ignore ArrayIndexOutOfBounds
+	        			continue;
+	        		}
+	        		
+	        		maze[r][c].setRow(r);
+    				maze[r][c].setCol(c);
+    				maze[r][c].setType(NodeType.ENEMY);
+	        		
+	        		try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+			 }
+		}
 	}
 	
 	/**
