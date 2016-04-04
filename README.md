@@ -22,7 +22,7 @@ To pick up a weapon or use a bomb walk into the wall were the object is. Same ru
 * Player: You move around as a player. The player has various images for all directions, and images for when a weapon is being held.
 * Enemies: Enemies all have thier own thread to control their movement. They make use of two brute force search algorithms (Depth-first search, Breadth-first search) to move independently. Enemies are the spiders and they have two images which simulate the spider bouncing up and down.
 * Weapons: 3 weapons are available, a toothpick, sword and spider spray. Each have a determined power for the fuzzy logic Fighting class, a toothpicks power ranges between 1-3, sword is 4-7 and spiderspray 7-10. The more powerful the weapon(closer to 10) the more damage is dealt to enemies.
-* Your player has a health bar that ranges from 25-100, once you kill an enemy your health is replenished but if you dont you can die depending on the power of your weapon and the enemy. This is all computed in the Fuzzy logic class [Fighting.java](Fighting.java)
+* Your player has a health bar that ranges from 25-100, once you kill an enemy your health is replenished but if you dont you can die depending on the power of your weapon and the enemy. This is all computed in the Fuzzy logic class [Fighting.java](https://github.com/AaronFlanagan20/A-Heuristically-Informed-Fuzzy-Maze-Game/blob/master/src/ie/gmit/sw/fuzzylogic/Fighting.java)
 * Steps: Your player has a finite number of steps before he gets tired and dies. You must find the exit before this happens.
 
 # How to run this project
