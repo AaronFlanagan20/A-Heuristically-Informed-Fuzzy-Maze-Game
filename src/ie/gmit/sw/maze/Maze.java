@@ -35,7 +35,6 @@ public class Maze {
 		addFeature('B', 'X');//bombs
 	}
 	
-	
 	/**
 	 * Loop through all the rows and columns and set them to walls
 	 */

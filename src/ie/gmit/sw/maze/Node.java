@@ -93,6 +93,8 @@ public class Node {
 			return 'P';
 		}if(type == NodeType.KEY){
 			return 'K';
+		}if(type == NodeType.ENEMY){
+			return 'E';
 		}if(type == NodeType.EXIT){
 			return '.';
 		}else{

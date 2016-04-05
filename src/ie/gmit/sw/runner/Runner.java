@@ -84,6 +84,7 @@ public class Runner extends JFrame implements KeyListener{
         for(Thread t: enemies){
         	t.start();
         }
+        
 	}
 	
 	/**
@@ -110,16 +111,16 @@ public class Runner extends JFrame implements KeyListener{
 			int row = (int) (MAZE_DIMENSION * Math.random());
 			int col = (int) (MAZE_DIMENSION * Math.random());
 			model[row][col] = new Node(row,col);
-			if(model[row][col].getType() != 'X' && model[row][col].getType() == ' '){
+			if(model[row][col].getType() == ' '){
 				model[row][col].setType(NodeType.ENEMY);
 				Thread t = new Thread(new Runnable() {
 					public void run() {
 						while(true){
 							int num = (int)(Math.random() * 10);
 							if(num >= 5)
-								bruteForce(model, model[row][col], view, true);
+								randomWalk(model, model[row][col], view, true);
 							else
-								bruteForce(model, model[row][col], view, false);
+								randomWalk(model, model[row][col], view, false);
 						}
 					}
 				});
@@ -139,7 +140,7 @@ public class Runner extends JFrame implements KeyListener{
     	if(model[row][col].getType() == ' '){
     		model[row][col].setType(NodeType.KEY);
     	}else{
-    		placePlayer();
+    		placeKey();
     	}
 	}
 	
@@ -151,10 +152,8 @@ public class Runner extends JFrame implements KeyListener{
 	 * @param viewer
 	 * @param lifo
 	 */
-	private void bruteForce(Node[][] maze, Node node, Component viewer, boolean lifo){
-		//LinkedList<Node> queue = new LinkedList<Node>();
-		//queue.add(node);
-				
+	private void randomWalk(Node[][] maze, Node node, Component viewer, boolean lifo){
+		
 		int num = (int)(Math.random() * 10);
 		
 		switch(num){
@@ -167,9 +166,12 @@ public class Runner extends JFrame implements KeyListener{
 			case 7: enemiesHealth.put(node, 5); break;
 			case 8: enemiesHealth.put(node, 8); break;
 			case 9: enemiesHealth.put(node, 5); break;
-			case 10: enemiesHealth.put(node, 9); break;
+			case 10: enemiesHealth.put(node, 6); break;
 	}
-			
+		
+//		LinkedList<Node> queue = new LinkedList<Node>();
+//		queue.add(node);
+//			
 //		while (!queue.isEmpty()){
 //			
 //			Node next = queue.poll();
@@ -223,24 +225,24 @@ public class Runner extends JFrame implements KeyListener{
 //				}
 //			}
 //		}
-
+		
+		int r = node.getRow();
+		int c = node.getCol();
+		
 		while(true){
-			int r = node.getRow();
-			int c = node.getCol();
-			
 			 for(int x=-1;x<=1;x++){
 	        		try{
-	        			Thread.sleep(1000);
+	        			Thread.sleep(200);
 	        			if(maze[r+x][c].getType() == ' '){
 	        				maze[r][c].setType(NodeType.NONE);
 	        				r+=x;
-	        			}else if(maze[r][c+x].getType() == ' '){
+	        			}if(maze[r][c+x].getType() == ' '){
 	        				maze[r][c].setType(NodeType.NONE);
 	        				c+=x;
-	        			}else if(maze[r-x][c].getType() == ' '){
+	        			}if(maze[r-x][c].getType() == ' '){
 	        				maze[r][c].setType(NodeType.NONE);
 	        				r-=x;
-	        			}else if(maze[r][c-x].getType() == ' '){
+	        			}if(maze[r][c-x].getType() == ' '){
 	        				maze[r][c].setType(NodeType.NONE);
 	        				c-=x;
 	        			}
@@ -248,12 +250,11 @@ public class Runner extends JFrame implements KeyListener{
 	        			continue;
 	        		}
 	        		
-	        		maze[r][c].setRow(r);
-    				maze[r][c].setCol(c);
+	        		
     				maze[r][c].setType(NodeType.ENEMY);
 	        		
-	        		try {
-						Thread.sleep(1000);
+    				try {
+						Thread.sleep(200);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
