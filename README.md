@@ -28,6 +28,7 @@ To pick up a weapon or use a bomb walk into the wall were the object is. Same ru
 * Weapons: 3 weapons are available, a toothpick, sword and spider spray. Each have a determined power for the fuzzy logic Fighting class, a toothpicks power ranges between 1-3, sword is 4-7 and spiderspray 7-10. The more powerful the weapon(closer to 10) the more damage is dealt to enemies.
 * Health: Your player has a health bar that ranges from 25-100, once you kill an enemy your health is replenished but if you dont you can die depending on the power of your weapon and the enemy. This is all computed in the Fuzzy logic class [Fighting.java](https://github.com/AaronFlanagan20/A-Heuristically-Informed-Fuzzy-Maze-Game/blob/master/src/ie/gmit/sw/fuzzylogic/Fighting.java)
 * Steps: Your player has a finite number of steps before he gets tired and dies. You must find the exit before this happens.
+* Exit: You need to find the stairs exit to end the game but to do so you must find the magic golden slinky
 
 # How to run this project
 First you can either download the zip file of this repository or clone it via git. You can then either open it up and run it in eclipse as a java project or open a command prompt and change directory to the project folder or jar file and run the command java -cp ./Fuzzy-Maze-Project.jar ie.gmit.sw.runner.Runner
