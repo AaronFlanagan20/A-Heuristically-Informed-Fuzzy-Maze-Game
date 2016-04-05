@@ -10,7 +10,7 @@ package ie.gmit.sw.maze;
  */
 public class Node {
 	
-	public enum NodeType{WALL, TOOTHPICK, SPRAY, SWORD, PRISONER, BOMB, PLAYER, ENEMY, EXIT, NONE};
+	public enum NodeType{WALL, TOOTHPICK, SPRAY, SWORD, PRISONER, BOMB, PLAYER, ENEMY, EXIT, KEY, NONE};
 	private NodeType type = NodeType.NONE;
 	public boolean visited =  false;
 	public Node goal;
@@ -91,8 +91,8 @@ public class Node {
 			return 'B';
 		}if(type == NodeType.PLAYER){
 			return 'P';
-		}if(type == NodeType.ENEMY){
-			return 'E';
+		}if(type == NodeType.KEY){
+			return 'K';
 		}if(type == NodeType.EXIT){
 			return '.';
 		}else{

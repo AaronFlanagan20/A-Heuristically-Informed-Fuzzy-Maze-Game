@@ -108,6 +108,12 @@ public class MazeView extends JPanel implements ActionListener{
 	    				continue;
 	    			}
 	    			
+	    			if(ch == 'K'){
+	    				g2.setColor(Color.GREEN);
+	    				g2.fillRect(x1, y1, size, size);
+	    				continue;
+	    			}
+	    			
 	    			if(ch == '.'){
 	    				g2.setColor(Color.CYAN);
 	    				g2.fillRect(x1, y1, size, size);
@@ -165,6 +171,8 @@ public class MazeView extends JPanel implements ActionListener{
             		imageIndex = 21;
         		}else if (ch == 'S'){
             		imageIndex = 22;
+        		}else if (ch == 'K'){
+            		imageIndex = 28;
         		}else if (ch == 'P'){
         			imageIndex = player_state;    
         		}else if (ch == 'E'){
@@ -222,7 +230,7 @@ public class MazeView extends JPanel implements ActionListener{
 	 * @throws Exception
 	 */
 	private void init() throws Exception{
-		images = new BufferedImage[28];
+		images = new BufferedImage[29];
 		images[0] = ImageIO.read(new java.io.File("resources/wall.png"));
 		images[1] = ImageIO.read(new java.io.File("resources/sword.png"));		
 		images[2] = ImageIO.read(new java.io.File("resources/prisoner.png"));
@@ -250,5 +258,6 @@ public class MazeView extends JPanel implements ActionListener{
 		images[25] = ImageIO.read(new java.io.File("resources/health-bar50.png"));
 		images[26] = ImageIO.read(new java.io.File("resources/health-bar25.png"));
 		images[27] = ImageIO.read(new java.io.File("resources/player_sword_up_midrun.png"));
+		images[28] = ImageIO.read(new java.io.File("resources/slinky-key.png"));
 	}
 }

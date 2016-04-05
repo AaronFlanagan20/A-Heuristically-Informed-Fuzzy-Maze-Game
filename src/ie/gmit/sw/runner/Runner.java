@@ -45,6 +45,7 @@ public class Runner extends JFrame implements KeyListener{
 	private int weaponStrength = 0;
 	public static int playerHealth = 100;
 	public static int stepsLeft = 0;
+	private boolean hasKey = false;
 	
 	/**
 	 * Add in MazeView, create a Thread array for enemies to move and a list to store the enemy and their health
@@ -63,6 +64,7 @@ public class Runner extends JFrame implements KeyListener{
     	
     	placePlayer();
     	placeEnemy();
+    	placeKey();
     		    	
     	Dimension d = new Dimension(MazeView.DEFAULT_VIEW_SIZE, MazeView.DEFAULT_VIEW_SIZE);
     	view.setPreferredSize(d);
@@ -128,6 +130,17 @@ public class Runner extends JFrame implements KeyListener{
 			}
 				
 		}
+	}
+	
+	private void placeKey(){
+		int row  = (int) (MAZE_DIMENSION * Math.random());
+    	int col = (int) (MAZE_DIMENSION * Math.random());
+    	
+    	if(model[row][col].getType() == ' '){
+    		model[row][col].setType(NodeType.KEY);
+    	}else{
+    		placePlayer();
+    	}
 	}
 	
 	/**
@@ -475,11 +488,19 @@ public class Runner extends JFrame implements KeyListener{
 				blowUpBomb(model[r][c], 3);
 			}
 			
-			if(model[r][c].getType() == '.'){ 
+			if(model[r][c].getType() == '.' && hasKey){ 
 				model[r][c] = new Node(r,c);
 				model[r][c].setType(NodeType.NONE);
 				new GameOver("You win");
 				this.dispose();
+			}
+			
+			if(model[r][c].getType() == 'K'){ 
+				model[r][c] = new Node(r,c);
+				model[currentRow][currentCol].setType(NodeType.NONE);
+				model[r][c].setType(NodeType.PLAYER);
+				hasKey = true;
+				return true;
 			}
 			
 			if(model[r][c].getType() == 'E'){ 
