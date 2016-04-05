@@ -205,6 +205,7 @@ public class MazeView extends JPanel implements ActionListener{
 			case 10: player_state = 17; break;//player sword midrun right
 			case 11: player_state = 18; break;//player sword left
 			case 12: player_state = 19; break;//player sword midrun left
+			case 13: player_state = 27; break;//player sword up midrun
 		}
 						
 		if (enemy_state < 0 || enemy_state == 5){
@@ -248,5 +249,6 @@ public class MazeView extends JPanel implements ActionListener{
 		images[24] = ImageIO.read(new java.io.File("resources/health-bar75.png"));
 		images[25] = ImageIO.read(new java.io.File("resources/health-bar50.png"));
 		images[26] = ImageIO.read(new java.io.File("resources/health-bar25.png"));
+		images[27] = ImageIO.read(new java.io.File("resources/player_sword_up_midrun.png"));
 	}
 }

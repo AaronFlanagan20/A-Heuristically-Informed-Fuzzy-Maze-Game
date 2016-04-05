@@ -272,14 +272,14 @@ public class Runner extends JFrame implements KeyListener{
 				    	if (isValidMove(currentRow - 1, currentCol)){
 				    		if(MazeView.hasSword){
 								if(swordMoveCount == 7){
-				    				MazeView.direction = swordMoveCount;
-				        			currentRow--;
-				    				swordMoveCount++;
-				    				stepsLeft++;
-				    			}else{
 				    				MazeView.direction = 8;
 				        			currentRow--;
-				    				swordMoveCount--;
+				    				swordMoveCount = 8;
+				    				stepsLeft++;
+				    			}else{
+				    				MazeView.direction = 13;
+				        			currentRow--;
+				    				swordMoveCount = 7;
 				    				stepsLeft++;
 				    			}
 				    		}else{
@@ -309,14 +309,14 @@ public class Runner extends JFrame implements KeyListener{
 						if (isValidMove(currentRow + 1, currentCol)){
 				    		if(MazeView.hasSword){
 				    			if(swordMoveCount == 7){
-				    				MazeView.direction = swordMoveCount;
-				    				currentRow++;
-				    				swordMoveCount++;
-				    				stepsLeft++;
-				    			}else{
 				    				MazeView.direction = 8;
 				    				currentRow++;
-				    				swordMoveCount--;
+				    				swordMoveCount = 8;
+				    				stepsLeft++;
+				    			}else{
+				    				MazeView.direction = 13;
+				    				currentRow++;
+				    				swordMoveCount = 7;
 				    				stepsLeft++;
 				    			}
 				    		}else {
@@ -346,14 +346,14 @@ public class Runner extends JFrame implements KeyListener{
 						if (isValidMove(currentRow, currentCol + 1)){
 				    		if(MazeView.hasSword){
 				    			if(swordMoveCount == 9){
-				    				MazeView.direction = swordMoveCount;
+				    				MazeView.direction = 9;
 				    				currentCol++;
-				    				swordMoveCount++;
+				    				swordMoveCount = 10;
 				    				stepsLeft++;
 				    			}else{
 				    				MazeView.direction = 10;
 				    				currentCol++;
-				    				swordMoveCount--;
+				    				swordMoveCount = 9;
 				    				stepsLeft++;
 				    			}
 				    		}else{
@@ -382,14 +382,14 @@ public class Runner extends JFrame implements KeyListener{
 						if (isValidMove(currentRow, currentCol - 1)){
 				    		if(MazeView.hasSword){
 				    			if(swordMoveCount == 11){
-				    				MazeView.direction = swordMoveCount;
+				    				MazeView.direction = 11;
 				    				currentCol--;
-				    				swordMoveCount++;
+				    				swordMoveCount = 12;
 				    				stepsLeft++;
 				    			}else{
 				    				MazeView.direction = 12;
 				    				currentCol--;
-				    				swordMoveCount--;
+				    				swordMoveCount = 11;
 				    				stepsLeft++;
 				    			}
 				    		}else{
